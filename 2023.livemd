@@ -1,0 +1,72 @@
+# Advent of Code 2023
+
+```elixir
+Mix.install([
+  {:kino, "~> 0.14.0"},
+  {:kino_aoc, "~> 0.1"},
+  {:kino_vega_lite, "~> 0.1.11"}
+])
+```
+
+## Introduction
+
+Proceed with caution! I'm learning Elixir here, this is not good Elixir code. I skipped Day 1, just warming up for 2024.
+
+## Day 2
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJkYXkyIiwiZGF5IjoiMiIsInNlc3Npb25fc2VjcmV0IjoiQU9DX1NFU1NJT04iLCJ5ZWFyIjoiMjAyMyJ9","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, day2} = KinoAOC.download_puzzle("2023", "2", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+defmodule Day2 do
+  def parse(str) do
+    str |> String.split("\n", trim: true) |> Enum.map(&parse_game/1)
+  end
+
+  def parse_game(str) do
+    [g, sets] = String.split(str, ": ", trim: true)
+
+    sets = sets |> String.split("; ", trim: true) |> Enum.map(&String.split(&1, ", ", trim: true))
+
+    sets = sets |> Enum.map(fn s ->
+      Enum.map(s, fn x ->
+        [count, color] = String.split(x, " ", trim: true)
+
+        { color, String.to_integer(count) }
+      end)
+    end)
+      |> Enum.map(&Map.new/1)
+      |> Enum.reduce(%{}, fn map, acc ->
+            Map.merge(acc, map, fn _key, val1, val2 -> max(val1, val2) end)
+          end)
+
+    [g, sets]
+  end
+end
+```
+
+```elixir
+Day2.parse(day2)
+  |> Enum.filter(fn [_g, colors] -> 
+    Map.get(colors, "red", 0) <= 12 && Map.get(colors, "green", 0) <= 13 && Map.get(colors, "blue", 0) <= 14
+  end)
+  |> Enum.map(fn [g, _colors] ->
+    String.replace_leading(g, "Game ", "") 
+    |> String.to_integer end)
+  |> Enum.sum
+```
+
+## Part 2
+
+```elixir
+Day2.parse(day2)
+|> Enum.map(fn [g, colors] ->
+  [g, Map.get(colors, "red", 1) * Map.get(colors, "green", 1) * Map.get(colors, "blue", 1)]
+  end)
+|> Enum.map(fn [_g, pow] -> pow end) |> Enum.sum
+```
+
+<!-- livebook:{"offset":1806,"stamp":{"token":"XCP.j0ZyJJo7CbAcuAiefxDbbYAufJBuDIc9EgQGeK7dWSqK_j3548yULsXZCz-VQsTRdAJe5d-Ql6n1zF6lZAkQeFcxcSmJcASqD1pGTMacOlQtSEEPZjFxFTWKHzOEXTMAAsQicfpCfP2x","version":2}} -->
