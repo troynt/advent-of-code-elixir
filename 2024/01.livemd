@@ -1,10 +1,11 @@
+<!-- livebook:{"persist_outputs":true} -->
+
 # Advent of Code 2024
 
 ```elixir
 Mix.install([
-  {:kino, "~> 0.14.0"},
   {:kino_aoc, "~> 0.1"},
-  {:kino_vega_lite, "~> 0.1.11"}
+  {:benchee, "~> 1.1", only: :dev}
 ])
 ```
 
@@ -20,6 +21,13 @@ Proceed with caution! Learning Elixir here, this code may be rough.
 {:ok, day1} = KinoAOC.download_puzzle("2024", "1", System.fetch_env!("LB_AOC_SESSION"))
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "49744   57964\n20738   85861\n20319   65072\n79568   74248\n78194   83454\n48701   94102\n69552   26808\n62781   67392\n85323   47428\n99344   72568\n27523   97243\n48039   36600\n91532   31571\n21306   31571\n52409   10805\n33901   31571\n80772   38756\n13849   54584\n72294   28326\n86065   65553\n93987   72533\n81640   39741\n25701   89912\n98611   57082\n80949   94974\n84717   61876\n31599   57082\n87119   65871\n56659   22897\n60864   45613\n64914   23217\n41931   23325\n13675   56060\n85486   66429\n99589   34428\n80942   50436\n66446   27795\n62260   94102\n17991   95754\n38666   94018\n82715   65319\n96748   95959\n76620   75639\n39724   86975\n83462   61805\n80757   66429\n80161   66912\n27338   97381\n29349   58983\n19921   95959\n33222   95959\n29944   13408\n33806   85400\n70346   93552\n62146   56773\n29455   80011\n13072   39741\n78082   85362\n68244   22897\n92699   85216\n77401   20843\n53297   82515\n47145   90966\n21714   83969\n38897   81770\n26583   96472\n33538   94102\n50607   51437\n29920   18034\n86162   28326\n20887   26374\n70011   95959\n91072   33837\n78041   78550\n36971   96504\n93552   45613\n35166   39027\n55765   21306\n62548   27834\n25287   27430\n16941   92472\n92686   35418\n18196   61876\n98271   56773\n70197   57082\n60087   36019\n94691   57607\n71834   36600\n66838   72703\n99514   30035\n87478   37752\n31855   89828\n63670   55131\n96582   96472\n56506   28326\n22986   50890\n28459   76391\n81838   56060\n73857   57964\n65911   96472\n70631   78246\n35372   83680\n59537   53263\n69802   83656\n60922   95754\n98033   55131\n61192   56233\n10544   96472\n70076   96748\n10345   72533\n44069   59959\n51368   24943\n32209   94323\n93608   15236\n66052   18518\n18194   74248\n61876   60690\n38359   91941\n99648   94102\n26870   95959\n42700   22080\n60343   57082\n86403   63844\n68549   71668\n94395   31571\n54117   76136\n82957   91182\n76970   30786\n21467   96999\n63240   61876\n41407   52311\n79043   64533\n68714   18737\n88316   43212\n74330   56060\n95754   42389\n97007   15593\n23600   61876\n35794   37497\n51155   33837\n38878   57779\n88160   66923\n85960   15356\n19608   90678\n15335   19142\n37858   28326\n52362   61567\n92440   25615\n40806   68569\n71751   97177\n42549   70211\n97573   97882\n70977   72533\n82166   87204\n73168   45613\n33988   40287\n81017   24791\n97826   39494\n49366   57853\n58833   30509\n12049   99552\n44295   28655\n33286   86203\n68443   28326\n72269   59959\n56222   28326\n66315   57082\n76461   90360\n46531   28326\n63925   80949\n34114   91182\n81992   31571\n24536   11763\n22518   70755\n11355   31571\n31145   28326\n55129   17000\n17135   54266\n19316   57094\n63206   26374\n31039   57082\n20090   45613\n25633   34423\n95984   74248\n28231   31899\n79070   33837\n20608   10744\n31697   41568\n13523   99552\n44342   74248\n58138   66429\n53615   11293\n13400   99229\n44548   22051\n24137   37497\n30607   56348\n53530   14398\n44035   83213\n56874   38315\n79779   99487\n43670   58472\n18036   94582\n92084   36917\n95857   89269\n59178   48607\n77507   14389\n24249   94980\n68856   14162\n46913   13677\n77339   59959\n40867   94102\n20361   27399\n10126   40204\n56279   57964\n37924   33837\n35066   28326\n79906   33390\n77938   18925\n30427   74248\n49792   39885\n10401   72533\n27300   12967\n15461   66429\n86381   10670\n25350   72755\n79472   90026\n11038   78545\n31085   82018\n29807   94018\n50918   37018\n56092   21306\n18839   97675\n12995   26374\n89946   62988\n59719   56060\n23083   50209\n14050   77608\n61314   53662\n55468   87206\n32735   39741\n54600   91182\n15821   77607\n88847   22065\n99872   95959\n53375   22897\n35209   56060\n77630   91182\n96800   96472\n26264   66429\n35274   25151\n25538   61863\n23186   96504\n91734   39741\n91485   59959\n89103   36687\n78785   96472\n13949   65200\n44396   31571\n16507   29954\n65200   56352\n67353   98520\n44969   45613\n70144   10313\n52148   90071\n43359   21780\n83268   52625\n92052   42928\n56773   32010\n77013   33885\n83505   38104\n44966   20462\n30790   94102\n73511   57082\n17994   13777\n52046   31571\n71445   38756\n31099   57082\n96873   72533\n63090   47113\n39327   68753\n33913   60253\n38546   53200\n16726   29956\n86820   42850\n61083   38756\n40096   55131\n95004   23484\n17136   61958\n87117   80803\n44050   92626\n65352   22440\n13813   61876\n82994   " <> ...}
+```
+
 ```elixir
 day1_ex = "3   4
 4   3
@@ -27,6 +35,12 @@ day1_ex = "3   4
 1   3
 3   9
 3   3"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"3   4\n4   3\n2   5\n1   3\n3   9\n3   3"
 ```
 
 ```elixir
@@ -40,22 +54,33 @@ defmodule Day1 do
 
   def solve(str) do
     
-    { odds, evens } = parse(str)
+    { left, right } = parse(str)
 
-    evens = Enum.sort(evens)
-    odds = Enum.sort(odds)
+    left = Enum.sort(left)
+    right = Enum.sort(right)    
     
-    
-    Enum.zip_reduce(odds,evens, 0, fn a,b,acc ->
-      acc = acc + abs(a - b)
+    Enum.zip_reduce(left, right, 0, fn l, r,acc ->
+      acc = acc + abs(l - r)
       acc
     end)
   end
 end
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day1, <<70, 79, 82, 49, 0, 0, 10, ...>>, {:solve, 1}}
+```
+
 ```elixir
 Day1.parse(day1_ex)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{[3, 4, 2, 1, 3, 3], [4, 3, 5, 3, 9, 3]}
 ```
 
 <!-- livebook:{"reevaluate_automatically":true} -->
@@ -64,8 +89,20 @@ Day1.parse(day1_ex)
 Day1.solve(day1_ex)
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+11
+```
+
 ```elixir
 Day1.solve(day1)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+3569916
 ```
 
 ## Part 2
@@ -74,10 +111,274 @@ Day1.solve(day1)
 Day1.parse(day1_ex)
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+{[3, 4, 2, 1, 3, 3], [4, 3, 5, 3, 9, 3]}
+```
+
 ```elixir
 {left, right} = Day1.parse(day1)
 frequencies = Enum.frequencies(right)
 Enum.map(left, fn l -> l * Map.get(frequencies, l, 0) end) |> Enum.sum
 ```
 
-<!-- livebook:{"offset":1422,"stamp":{"token":"XCP.Os3_5A4QW0F2iecR76MIMxoa7-IlWPD6lmTx9IuzGNG2wtlkPtdqaj2ISVuSc0oKs5QQ4zp-BH4FFA8EzLAnx57YLhS0hLSPxzNqmwBpf7SatNL6Ehx-xWuTgsvVrU0HXQpfJ1xd1E6E","version":2}} -->
+<!-- livebook:{"output":true} -->
+
+```
+26407426
+```
+
+```elixir
+Enum.reduce(left, 0, fn l, acc -> acc + (l * Map.get(frequencies, l, 0)) end)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+26407426
+```
+
+```elixir
+Benchee.run(%{
+  "reduce" => fn ->
+    Enum.reduce(left, 0, fn l, acc -> acc + (l * Map.get(frequencies, l, 0)) end)
+  end,
+  "sum" => fn ->
+    Enum.map(left, fn l -> l * Map.get(frequencies, l, 0) end) |> Enum.sum
+  end
+})
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+Error trying to determine erlang version enoent, falling back to overall OTP version
+Warning: the benchmark reduce is using an evaluated function.
+  Evaluated functions perform slower than compiled functions.
+  You can move the Benchee caller to a function in a module and invoke `Mod.fun()` instead.
+  Alternatively, you can move the benchmark into a benchmark.exs file and run mix run benchmark.exs
+
+Warning: the benchmark sum is using an evaluated function.
+  Evaluated functions perform slower than compiled functions.
+  You can move the Benchee caller to a function in a module and invoke `Mod.fun()` instead.
+  Alternatively, you can move the benchmark into a benchmark.exs file and run mix run benchmark.exs
+
+Operating System: Windows
+CPU Information: 13th Gen Intel(R) Core(TM) i9-13900K
+Number of Available Cores: 32
+Available memory: 63.75 GB
+Elixir 1.17.2
+Erlang 27
+JIT enabled: true
+
+Benchmark suite executing with the following configuration:
+warmup: 2 s
+time: 5 s
+memory time: 0 ns
+reduction time: 0 ns
+parallel: 1
+inputs: none specified
+Estimated total run time: 14 s
+
+Benchmarking reduce ...
+Benchmarking sum ...
+Calculating statistics...
+Formatting results...
+
+Name             ips        average  deviation         median         99th %
+sum           1.23 K        0.81 ms     ±8.28%        0.82 ms        1.02 ms
+reduce        0.92 K        1.08 ms     ±5.10%        1.13 ms        1.23 ms
+
+Comparison: 
+sum           1.23 K
+reduce        0.92 K - 1.33x slower +0.27 ms
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+%Benchee.Suite{
+  system: %Benchee.System{
+    elixir: "1.17.2",
+    erlang: "27",
+    jit_enabled?: true,
+    num_cores: 32,
+    os: :Windows,
+    available_memory: "63.75 GB",
+    cpu_speed: "13th Gen Intel(R) Core(TM) i9-13900K"
+  },
+  configuration: %Benchee.Configuration{
+    parallel: 1,
+    time: 5000000000.0,
+    warmup: 2000000000.0,
+    memory_time: 0.0,
+    reduction_time: 0.0,
+    pre_check: false,
+    formatters: [Benchee.Formatters.Console],
+    percentiles: ~c"2c",
+    print: %{configuration: true, fast_warning: true, benchmarking: true},
+    inputs: nil,
+    input_names: [],
+    save: false,
+    load: false,
+    unit_scaling: :best,
+    assigns: %{},
+    before_each: nil,
+    after_each: nil,
+    before_scenario: nil,
+    after_scenario: nil,
+    measure_function_call_overhead: false,
+    title: nil,
+    profile_after: false
+  },
+  scenarios: [
+    %Benchee.Scenario{
+      name: "sum",
+      job_name: "sum",
+      function: #Function<43.39164016/0 in :erl_eval.expr/6>,
+      input_name: :__no_input,
+      input: :__no_input,
+      before_each: nil,
+      after_each: nil,
+      before_scenario: nil,
+      after_scenario: nil,
+      tag: nil,
+      run_time_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: 814044.125794362,
+          ips: 1228.4346367884887,
+          std_dev: 67439.72079176725,
+          std_dev_ratio: 0.08284528891595169,
+          std_dev_ips: 101.77002239910452,
+          median: 819200.0,
+          percentiles: %{50 => 819200.0, 99 => 1024000.0},
+          mode: 819200,
+          minimum: 716800,
+          maximum: 1740800,
+          relative_more: nil,
+          relative_less: nil,
+          absolute_difference: nil,
+          sample_size: 6137
+        },
+        samples: [921600, 819200, 819200, 819200, 819200, 819200, 819200, 819200, 819200, 716800,
+         921600, 819200, 819200, 716800, 819200, 819200, 819200, 819200, 819200, 819200, 819200,
+         819200, 819200, 819200, 819200, 819200, 819200, 819200, 819200, 716800, 819200, 819200,
+         819200, ...]
+      },
+      memory_usage_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: nil,
+          ips: nil,
+          std_dev: nil,
+          std_dev_ratio: nil,
+          std_dev_ips: nil,
+          median: nil,
+          percentiles: nil,
+          mode: nil,
+          minimum: nil,
+          maximum: nil,
+          relative_more: nil,
+          relative_less: nil,
+          absolute_difference: nil,
+          sample_size: 0
+        },
+        samples: []
+      },
+      reductions_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: nil,
+          ips: nil,
+          std_dev: nil,
+          std_dev_ratio: nil,
+          std_dev_ips: nil,
+          median: nil,
+          percentiles: nil,
+          mode: nil,
+          minimum: nil,
+          maximum: nil,
+          relative_more: nil,
+          relative_less: nil,
+          absolute_difference: nil,
+          sample_size: 0
+        },
+        samples: []
+      }
+    },
+    %Benchee.Scenario{
+      name: "reduce",
+      job_name: "reduce",
+      function: #Function<43.39164016/0 in :erl_eval.expr/6>,
+      input_name: :__no_input,
+      input: :__no_input,
+      before_each: nil,
+      after_each: nil,
+      before_scenario: nil,
+      after_scenario: nil,
+      tag: nil,
+      run_time_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: 1084253.5908006076,
+          ips: 922.2934638949223,
+          std_dev: 55348.00242280177,
+          std_dev_ratio: 0.0510471008741904,
+          std_dev_ips: 47.08040748705058,
+          median: 1126400.0,
+          percentiles: %{50 => 1126400.0, 99 => 1228800.0},
+          mode: 1126400,
+          minimum: 1024000,
+          maximum: 1740800,
+          relative_more: 1.331934666001759,
+          relative_less: 0.750787576542196,
+          absolute_difference: 270209.46500624553,
+          sample_size: 4609
+        },
+        samples: [1126400, 1126400, 1024000, 1126400, 1126400, 1024000, 1126400, 1024000, 1126400,
+         1024000, 1126400, 1024000, 1126400, 1024000, 1126400, 1126400, 1024000, 1126400, 1024000,
+         1126400, 1024000, 1126400, 1126400, 1024000, 1126400, 1024000, 1126400, 1024000, 1126400,
+         1024000, 1126400, 1024000, ...]
+      },
+      memory_usage_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: nil,
+          ips: nil,
+          std_dev: nil,
+          std_dev_ratio: nil,
+          std_dev_ips: nil,
+          median: nil,
+          percentiles: nil,
+          mode: nil,
+          minimum: nil,
+          maximum: nil,
+          relative_more: nil,
+          relative_less: nil,
+          absolute_difference: nil,
+          sample_size: 0
+        },
+        samples: []
+      },
+      reductions_data: %Benchee.CollectionData{
+        statistics: %Benchee.Statistics{
+          average: nil,
+          ips: nil,
+          std_dev: nil,
+          std_dev_ratio: nil,
+          std_dev_ips: nil,
+          median: nil,
+          percentiles: nil,
+          mode: nil,
+          minimum: nil,
+          maximum: nil,
+          relative_more: nil,
+          relative_less: nil,
+          absolute_difference: nil,
+          sample_size: 0
+        },
+        samples: []
+      }
+    }
+  ]
+}
+```
+
+<!-- livebook:{"offset":13755,"stamp":{"token":"XCP.H6_3azAdYNqQ1m1VJfKyMk4T9rd1J7w2qzbtAQSyUh2giWZkOZi8JyO7528ZM9N0_0T1R6H2pyfbq6i1Yde1Df_QCd_UqWB-OO3Wcsw6TADdbymd10BHbYz-0OfqLzbHyHP60w368Uyy","version":2}} -->
