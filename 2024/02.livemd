@@ -4,8 +4,7 @@
 
 ```elixir
 Mix.install([
-  {:kino_aoc, "~> 0.1"},
-  {:benchee, "~> 1.1", only: :dev}
+  {:kino_aoc, "~> 0.1"}
 ])
 ```
 
@@ -130,4 +129,4 @@ end)
 612
 ```
 
-<!-- livebook:{"offset":6507,"stamp":{"token":"XCP.OLZvACgNkezMSJVDtoKpo5pby7XvJMKiJWdwH_uzxFKDOHkEa0r96LQMHbWnqqdCH0fRWARJY56xNhZpo7n6drnU58rHfyOIbtLVnRmi6tvHklhXhay07WHMBB9Np13k9OiI34Y5Srs4","version":2}} -->
+<!-- livebook:{"offset":6471,"stamp":{"token":"XCP.lU8kM4q7u-RoKepojTZpic6RrJgPv2suWNDmjSRh6s_elj_JlDsBpU_rYRHpkzoamV-tt74oT-6YwqDPoreScs-WCtP72aNBCAN3Gqe353n9paiakQMQ5T2iB4ttZwACNtkNA0vHvbfs","version":2}} -->
