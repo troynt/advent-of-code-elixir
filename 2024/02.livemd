@@ -46,7 +46,7 @@ example = "7 6 4 2 1
 defmodule Day2 do
   def parse_input(str) do
     str |> String.split("\n") 
-    |> Enum.map(fn x -> String.split(x, " ") |> Enum.map(&String.to_integer(&1)) end)
+    |> Enum.map(fn x -> String.split(x) |> Enum.map(&String.to_integer(&1)) end)
   end
   
   def is_safe_diff?([_]) do
@@ -72,6 +72,8 @@ end
 ```
 {:module, Day2, <<70, 79, 82, 49, 0, 0, 11, ...>>, {:is_valid_report?, 1}}
 ```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
 
 ```elixir
 [report | _] = example |> Day2.parse_input()
@@ -129,4 +131,4 @@ end)
 612
 ```
 
-<!-- livebook:{"offset":6471,"stamp":{"token":"XCP.lU8kM4q7u-RoKepojTZpic6RrJgPv2suWNDmjSRh6s_elj_JlDsBpU_rYRHpkzoamV-tt74oT-6YwqDPoreScs-WCtP72aNBCAN3Gqe353n9paiakQMQ5T2iB4ttZwACNtkNA0vHvbfs","version":2}} -->
+<!-- livebook:{"offset":6519,"stamp":{"token":"XCP.Bw2wX0q2zcFd4DWjaOjzA8Je-YVLV5vUBb32aJLQDxse56l8I9RlTE_7q_lt_dTR4M6Gcs9d70xTnLpOmY5chvVEQ7kOY7Hk3lZCvkaiyJzFcLQGNxUxS4U7rgdaqodgptWtOH0cYsIx","version":2}} -->
