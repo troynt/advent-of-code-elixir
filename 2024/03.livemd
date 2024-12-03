@@ -1,0 +1,85 @@
+# Advent of Code 2024 - Day 3
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/3
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiIzIiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "3", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+defmodule Day3 do
+  def compute(str) do
+    Regex.scan(~r/mul\(\d+,\d+\)/, str) 
+    |> Enum.flat_map(fn str ->
+         str
+      end)
+    |> Enum.map(fn str ->
+      [a, b] = str |> String.replace("mul(", "") |> String.replace(")", "") |> String.split(",") |> Enum.map(&String.to_integer/1)
+        a * b
+      end) |> Enum.sum
+  end
+
+  def p(<<"don't", rest::bitstring>>, _should_multiply, acc) do
+    p(rest, false, acc)
+  end
+
+  def p(<<"do", rest::bitstring>>, _should_multiply, acc) do
+    p(rest, true, acc)
+  end
+
+  def p(<<"mul(", rest::bitstring>>, should_multiply, acc) do
+    found = Regex.scan(~r/^\d+,\d+\)/, rest) |> Enum.at(0)
+    if should_multiply && found do
+      [nums, _] = found |> Enum.at(0) |> String.split(")", parts: 2)
+      [a, b ] = nums |> String.split(",", parts: 2) |> Enum.map(&String.to_integer/1)
+      p(rest, should_multiply, [a*b | acc])
+    else
+      p(rest, should_multiply, acc)
+    end
+  end
+  
+  def p("", _should_multiply, acc) do
+    IO.inspect(acc)
+    acc |> Enum.sum
+  end
+
+  def p(<<_a::utf8, rest::bitstring>>, should_multiply, acc) do
+    p(rest, should_multiply, acc)
+  end
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+example_input = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)mul(8,5))"
+Day3.compute(example_input)
+```
+
+```elixir
+Day3.compute(puzzle_input)
+```
+
+```elixir
+example_input2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
+Day3.p(example_input2, true, [])
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day3.p(puzzle_input, true, [])
+```
+
+<!-- livebook:{"offset":2087,"stamp":{"token":"XCP.mdJsgx_FWYmZ9lp_u6mz70CPy4Z9JVApmndo-f2JUR7JUP-RtGXkSGxAFCcqvDpovBTy031oUKhG0Q5rCZowPyFscWsl5vfNPxoCE83yFwm99B7s3bY","version":2}} -->
