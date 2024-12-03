@@ -38,20 +38,24 @@ defmodule Day3 do
     p(rest, true, acc)
   end
 
-  def p(<<"mul(", rest::bitstring>>, should_multiply, acc) do
+  def p(<<"mul(", rest::bitstring>>, false, acc) do
+    p(rest, false, acc)
+  end
+
+  def p(<<"mul(", rest::bitstring>>, true, acc) do
     found = Regex.scan(~r/^\d+,\d+\)/, rest) |> Enum.at(0)
-    if should_multiply && found do
+    if found do
       [nums, _] = found |> Enum.at(0) |> String.split(")", parts: 2)
       [a, b ] = nums |> String.split(",", parts: 2) |> Enum.map(&String.to_integer/1)
-      p(rest, should_multiply, [a*b | acc])
+      p(rest, true, [a*b | acc])
     else
-      p(rest, should_multiply, acc)
+      p(rest, true, acc)
     end
   end
   
   def p("", _should_multiply, acc) do
     IO.inspect(acc)
-    acc |> Enum.sum
+    Enum.sum(acc)
   end
 
   def p(<<_a::utf8, rest::bitstring>>, should_multiply, acc) do
@@ -67,9 +71,13 @@ example_input = "xmul(2,4)%&mul[3,7]!@^do_not_mul(5,5)+mul(32,64]then(mul(11,8)m
 Day3.compute(example_input)
 ```
 
+<!-- livebook:{"reevaluate_automatically":true} -->
+
 ```elixir
 Day3.compute(puzzle_input)
 ```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
 
 ```elixir
 example_input2 = "xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)undo()?mul(8,5))"
@@ -82,4 +90,4 @@ Day3.p(example_input2, true, [])
 Day3.p(puzzle_input, true, [])
 ```
 
-<!-- livebook:{"offset":2087,"stamp":{"token":"XCP.mdJsgx_FWYmZ9lp_u6mz70CPy4Z9JVApmndo-f2JUR7JUP-RtGXkSGxAFCcqvDpovBTy031oUKhG0Q5rCZowPyFscWsl5vfNPxoCE83yFwm99B7s3bY","version":2}} -->
+<!-- livebook:{"offset":2222,"stamp":{"token":"XCP.HsiMGXghhqU1L5MqGgV5EZc6x_FDaG0VSsJWtVL1pDENQMO7cz3D05Nd2QUbStzO5d73ElOGyi9QsesbmAIOtJKkjHk6JR6vBd-MJCW0Y9bhlerAigQ","version":2}} -->
