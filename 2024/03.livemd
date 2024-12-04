@@ -10,6 +10,8 @@ Mix.install([
 
 https://adventofcode.com/2024/day/3
 
+I could have used regular expressions for part two also and things may have been easier or shorter. I wanted to learn pattern matching in Elixir function parameters.
+
 <!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiIzIiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
 
 ```elixir
@@ -30,11 +32,11 @@ defmodule Day3 do
       end) |> Enum.sum
   end
 
-  def p(<<"don't", rest::bitstring>>, _should_multiply, acc) do
+  def p(<<"don't()", rest::bitstring>>, _should_multiply, acc) do
     p(rest, false, acc)
   end
 
-  def p(<<"do", rest::bitstring>>, _should_multiply, acc) do
+  def p(<<"do()", rest::bitstring>>, _should_multiply, acc) do
     p(rest, true, acc)
   end
 
@@ -90,4 +92,4 @@ Day3.p(example_input2, true, [])
 Day3.p(puzzle_input, true, [])
 ```
 
-<!-- livebook:{"offset":2222,"stamp":{"token":"XCP.HsiMGXghhqU1L5MqGgV5EZc6x_FDaG0VSsJWtVL1pDENQMO7cz3D05Nd2QUbStzO5d73ElOGyi9QsesbmAIOtJKkjHk6JR6vBd-MJCW0Y9bhlerAigQ","version":2}} -->
+<!-- livebook:{"offset":2393,"stamp":{"token":"XCP.LLs4pgHwhTcDl2__htbaDw7TT1QURwx-PeDGNJob6SSA4URuBUZnBPszWqbK-6iJz0QNUbruJmX0E4cQa-Pd5Xm4wn-btTGoHjMR_xizA_5FlGkDI3Q","version":2}} -->
