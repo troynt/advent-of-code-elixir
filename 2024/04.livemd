@@ -1,0 +1,152 @@
+# Advent of Code - Day 4
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/4
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI0Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "4", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+example_input2 = "....XXMAS.
+.SAMXMS...
+...S..A...
+..A.A.MS.X
+XMASAMX.MM
+X.....XA.A
+S.S.S.S.SS
+.A.A.A.A.A
+..M.M.M.MM
+.X.X.XMASX"
+```
+
+```elixir
+example_input = "MMMSXXMASM
+MSAMXMSMSA
+AMXSXMAAMM
+MSAMASMSMX
+XMASAMXAMM
+XXAMMXXAMA
+SMSMSASXSS
+SAXAMASAAA
+MAMMMXMMMM
+MXMXAXMASX"
+```
+
+```elixir
+defmodule Day4 do
+  @all_directions [
+    {-1, -1}, {-1, 0}, {-1, 1}, 
+    {0, -1},           {0, 1}, 
+    {1, -1}, {1, 0}, {1, 1}
+  ]
+  @diag_directions [
+    {-1, -1}, {-1, 1}, 
+    {1, -1}, {1, 1}
+  ]
+  
+def to_grid(str) do
+    str
+    |> String.split("\n", trim: true)
+    |> Enum.map(&String.graphemes/1)
+  end
+
+  def elem_at(grid, {x, y}) do
+    if x > -1 && y > -1 do
+      row = grid |> Enum.at(y)
+      if row do
+        row |> Enum.at(x)
+      end
+    end
+  end
+
+  def check_position(grid, {x, y}, directions, search_chars) do
+    goal_length = length(search_chars)
+
+    Enum.filter(directions, fn {dx, dy} ->
+      Enum.all?(1..goal_length - 1, fn i ->
+        elem_at(grid, {x + dx * i, y + dy * i}) == Enum.at(search_chars, i)
+      end)
+    end)
+  end
+
+  def grid_positions(grid) do
+    for y <- 0..(length(grid) - 1),
+        x <- 0..(length(Enum.at(grid, 0)) - 1),
+        do: {x, y}
+  end
+
+  def gen_solve(grid, directions, search_word) do
+    search_list = String.graphemes(search_word)
+    start_char = Enum.at(search_list, 0)
+
+    grid_positions(grid)
+    |> Enum.filter(fn {x, y} -> elem_at(grid, {x, y}) == start_char end)
+    |> Enum.reduce([], fn {x, y}, acc ->
+
+      dirs = check_position(grid, {x, y}, directions, search_list) |> Enum.map(fn dir -> {{x,y},dir} end)
+      
+      acc ++ dirs
+    end)
+  end
+
+  def solve_part1(str) do
+    str |> to_grid() |> gen_solve(@all_directions, "XMAS")  |> length
+  end
+
+  def solve_part2(str) do
+    str |> to_grid() |> gen_solve(@diag_directions, "MAS") |> Enum.map(fn {{x, y}, {dx, dy}} ->
+        {x + dx, y + dy}
+      end) |> Enum.frequencies() |> Enum.filter(fn {_k,v} ->
+      v >= 2
+      end) |> length
+  end
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+grid = Day4.to_grid(example_input2)
+```
+
+```elixir
+Day4.solve_part1(puzzle_input)
+```
+
+## Part 2
+
+```elixir
+example_input3 = ".M.S......
+..A..MSMS.
+.M.S.MAA..
+..A.ASMSM.
+.M.S.M....
+..........
+S.S.S.S.S.
+.A.A.A.A..
+M.M.M.M.M.
+.........."
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day4.solve_part2(example_input3)
+```
+
+```elixir
+Day4.solve_part2(puzzle_input)
+```
+
+<!-- livebook:{"offset":2909,"stamp":{"token":"XCP.caiyJoHpTzWwVJSHZZqy9cmhkTSW9DtCLttKfgB6CoPUWkeZK5crVm3eXvh2N3DQGfrIeCHEsGiuniLwYg2c99sjt4NpuZGvQawjXqVuCGxjHWG0FG8","version":2}} -->
