@@ -1,0 +1,179 @@
+# Advent of Code - Day 5
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/5
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI1Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "5", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+example_input = "47|53
+97|13
+97|61
+97|47
+75|29
+61|13
+75|53
+29|13
+97|29
+53|29
+61|53
+97|53
+61|29
+47|13
+75|47
+97|75
+47|61
+75|61
+47|29
+75|13
+53|13
+
+75,47,61,53,29
+97,61,53,29,13
+75,29,13
+75,97,47,61,53
+61,13,29
+97,13,75,29,47"
+```
+
+```elixir
+defmodule Day5 do  
+  def parse(str) do
+    [rules, updates] = String.split(str, "\n\n")
+    rules = String.split(rules, "\n") |> Enum.map(fn x ->
+      String.split(x, "|") |> Enum.map(&String.to_integer/1)
+      end)  |> Enum.group_by(fn [k,v] -> k end) |> Map.new()
+    updates = String.split(updates, "\n") |> Enum.map(fn x ->
+      String.split(x, ",") |> Enum.map(&String.to_integer/1)
+    end)
+
+    {rules, updates}
+  end
+
+  def fix(rules, update, [{_a_page, a_idx}]) do
+    Enum.reduce(0..length(update)-1, fn new_idx, acc ->
+      if new_idx != a_idx do
+        swapped = Enum.slide(update, a_idx, new_idx)
+        IO.inspect(swapped)
+        bad_pages = bad_pages_aux(rules, swapped)
+        if length(bad_pages) == 0 do
+          swapped
+        else
+          update
+        end
+      end
+    end)
+  end
+
+  def fix(rules, update, [{a_page, a_idx}, {b_page, b_idx} | _rest]) do
+    swapped = update
+      |> List.replace_at(a_idx, b_page)
+      |> List.replace_at(b_idx, a_page)
+
+    bad_pages = bad_pages_aux(rules, swapped)
+    if length(bad_pages) == 0 do
+      swapped
+    else
+      fix(rules, swapped, bad_pages)
+    end
+  end
+
+  def valid_update?(rules, update) do
+    applicable_rules = Map.take(rules, update)
+    pages = Map.new(Enum.with_index(update))
+
+    # IO.inspect(pages)
+
+    Enum.all?(pages, fn {p, idx} ->
+      p2_rules = Map.get(applicable_rules, p)
+      if p2_rules == nil do
+        true
+      else
+        Enum.all?(p2_rules, fn [_, p2] ->
+          found = Map.get(pages, p2)
+          if found == nil do
+            true
+          else
+            Map.get(pages, p2) > idx    
+          end
+        end)
+      end      
+    end)
+  end
+
+  def bad_pages_aux(applicable_rules, update) do
+    pages = Map.new(Enum.with_index(update))
+    Enum.reject(pages, fn {p, idx} ->
+      p2_rules = Map.get(applicable_rules, p)
+      if p2_rules == nil do
+        true
+      else
+        Enum.all?(p2_rules, fn [_, p2] ->
+          found = Map.get(pages, p2)
+          if found == nil do
+            true
+          else
+            Map.get(pages, p2) > idx    
+          end
+        end)
+      end      
+      end)
+  end
+
+  def add_middle_pages(updates) do
+    Enum.reduce(updates, 0, fn x, acc ->
+      acc + Enum.at(x, round(length(x) / 2) - 1)
+    end)
+  end
+
+  def solve_part1(str) do
+    {rules, updates} = parse(str)
+
+    good_updates = updates |> Enum.filter(&valid_update?(rules, &1))
+
+    # IO.inspect(good_updates)
+
+    good_updates |> add_middle_pages()
+  end
+
+  def solve_part2(str) do
+    {rules, updates} = parse(str)
+
+    bad_updates = updates |> Enum.reject(&valid_update?(rules, &1))
+
+    bad_updates |> Enum.map(fn update ->
+      applicable_rules = Map.take(rules, update)
+      bad_pages = bad_pages_aux(applicable_rules, update)
+      fix(rules, update, bad_pages)
+    end)
+  end
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day5.solve_part1(puzzle_input)
+```
+
+## Part 2
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day5.solve_part2(example_input)
+```
+
+<!-- livebook:{"offset":3759,"stamp":{"token":"XCP.cuDACsYu-3rnLDPu6t3nCeZNjkSuAvpSUm66WO7Ht-r8MrNghX4hfwNQPZUQds2o2yiwQy29H66RcjRqwOa1RDjwtrgYXP_YEdO7gBBS9kYv7UqgDbI","version":2}} -->
