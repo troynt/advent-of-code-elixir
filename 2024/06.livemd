@@ -1,0 +1,230 @@
+# Advent of Code - Day 6
+
+```elixir
+Mix.install([
+  {:kino, "~>0.14.2"},
+  {:kino_aoc, "~> 0.1"},
+  {:html_entities, "~> 0.5.2"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/6
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI2Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "6", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+defmodule GridRender do
+  def render(w, h, size, style_fn) do
+    cells =
+      for y <- 0..(h-1), x <- 0..(w-1), into: "" do
+        {text, fill} = style_fn.({x, y})
+
+        xoff = x * size
+        yoff = y * size
+
+        ~s"""
+        <g>
+        <rect x="#{xoff}" y="#{yoff}" width="#{size}" height="#{size}" style="stroke: #FFF" fill="#{fill}" />
+        <text x="#{xoff + (size / 2)}" y="#{yoff + (size / 1.5)}">#{text}</text>
+        </g>
+        """
+      end
+    svg = """
+    <svg width="#{w * size}" height="#{h * size}" viewbox="0 0 #{w * size} #{h * size}" xmlns="http://www.w3.org/2000/svg">
+      <style>
+        text { font-weight: bold; }
+      </style>
+      #{cells}
+    </svg>
+    """
+    # IO.puts(svg)
+    svg |> Kino.Image.new(:svg)
+  end
+  
+  
+end
+```
+
+```elixir
+defmodule Day6 do
+  @turn_directions %{"^" => ">", ">" => "v", "v" => "<", "<" => "^"}
+
+  
+  def parse(str) do
+    [{w, _}] = Regex.run(~r/\n/, str, return: :index)
+
+    grid = str |> String.split("\n")
+      |> Enum.with_index()
+      |> Enum.reduce([], fn {row, idx}, acc ->
+        res = row |> String.graphemes() |> Enum.with_index() |> Enum.map(fn {char, char_idx} ->
+          {{char_idx, idx}, char}
+        end)
+        acc ++ res
+      end)
+
+    grid |> Map.new()
+  end
+
+  def is_guard(direction) when direction in ["^", ">", "v", "<"], do: true
+  def is_guard(_), do: false
+
+  def get_guard(map) do
+    Enum.find(map, fn {_, char} -> is_guard(char) end)
+  end
+
+  def up(map, {x,y}) do
+    get_pos(map, {x , y - 1})
+  end
+  
+  def right(map, {x,y}) do
+    get_pos(map, {x+1 , y})
+  end
+
+  def left(map, {x,y}) do
+    get_pos(map, {x-1 , y})
+  end
+  
+  def down(map, {x,y}) do
+    get_pos(map, {x, y + 1})
+  end
+
+  def get_pos(map, pos) do    
+    found = Map.get(map, pos)
+    if found do
+      {pos, found}
+    else
+      nil
+    end
+  end
+
+  def turn_right(map, {pos, _}) do    
+    Map.update!(map, pos, &Map.fetch!(@turn_directions, &1))
+  end
+
+  def move_guard(map, {guard_coord, guard_dir}, new_coord) do
+    %{
+      map | guard_coord => ".",
+      new_coord => guard_dir
+    }
+  end
+
+  def patrol(map) do
+    {guard_pos, _} = get_guard(map)
+    patrol(map, MapSet.new(), guard_pos, 0, [])
+  end
+
+  def patrol(map, acc, guard_pos, turn_count, guard_moves) do
+    guard = get_pos(map, guard_pos)
+    if guard && turn_count < 5 do
+      {guard_pos, guard_dir} = guard
+      new_pos = case guard_dir do
+        "^" -> up(map, guard_pos)
+        ">" -> right(map, guard_pos)
+        "v" -> down(map, guard_pos)
+        "<" -> left(map, guard_pos)
+      end
+      if new_pos do
+        {next_coord, next_char } = new_pos
+        if next_char == "#" do
+          patrol(turn_right(map, guard), acc, guard_pos, turn_count + 1, guard_moves)
+        else
+          patrol(move_guard(map, guard, next_coord), MapSet.put(acc, next_coord), next_coord, 0, guard_moves ++ [{next_coord, guard_dir}])
+        end
+      else
+        {map, acc, guard_moves}
+      end
+    else
+      {map, acc, guard_moves}
+    end
+    
+  end
+
+  def render_map(map) do
+    {{_,h}, _} = Enum.max_by(map, fn {{_,y}, _} -> y end)
+    {{_,w}, _} = Enum.max_by(map, fn {{_,x}, _} -> x end)
+    
+    GridRender.render(w + 1, h + 1, 40, fn pos ->
+      {_, char } = get_pos(map, pos) 
+
+      fill = cond do 
+        is_guard(char) -> "#f00"
+        char == "#" -> "#000"
+        true -> "#ccc"
+      end
+
+      {HtmlEntities.encode(char), fill}
+    end)
+  end
+
+  def solve_part1(str) do
+    {_, acc, _} = parse(str) |> patrol()
+
+    acc |> MapSet.size()
+  end
+
+  def animate_part1(str, step_speed_ms) do
+    map = parse(str)
+
+    {guard_pos, _} = get_guard(map)
+
+    map = Map.put(map, guard_pos, ".")
+    
+    {_, _, guard_moves} = parse(str) |> patrol()
+
+    frames = Enum.map(guard_moves, fn {pos, dir} ->
+      updated_map = Map.put(map, pos, dir)
+      render_map(updated_map)
+    end)
+
+    Kino.animate(step_speed_ms, fn t ->
+      idx = rem(t, length(frames))
+      Enum.at(frames,idx)
+    end)
+  end
+end
+```
+
+```elixir
+example_input = "....#.....
+.........#
+..........
+..#.......
+.......#..
+..........
+.#..^.....
+........#.
+#.........
+......#..."
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+small_map = Day6.parse("...
+.<.
+...")
+Day6.render_map(small_map)
+```
+
+```elixir
+Day6.solve_part1(example_input)
+```
+
+```elixir
+Day6.animate_part1(example_input, 200)
+```
+
+```elixir
+Day6.solve_part1(puzzle_input)
+```
+
+<!-- livebook:{"offset":4986,"stamp":{"token":"XCP.-WTEqtBzYoypdsAM-s6kp-hiFk4k0XQ-shnE8X6_Xar454MYbCCowrPBgx6Kr0Vd_cJ5YFqjsQIaO6Q0EqJunnN7HZ4vn25n1gNLi2ZG80dVcqEC2l4","version":2}} -->
