@@ -155,13 +155,11 @@ defmodule Day6 do
     GridRender.render(w + 1, h + 1, 40, fn pos ->
       {_, char } = get_pos(map, pos) 
 
-      fill = cond do 
-        is_guard(char) -> "#f00"
-        char == "#" -> "#000"
-        true -> "#ccc"
+      cond do 
+        is_guard(char) -> { HtmlEntities.encode(char), "#f00" }
+        char == "#" -> { "", "#000" }
+        true -> { "", "#ccc" }
       end
-
-      {HtmlEntities.encode(char), fill}
     end)
   end
 
@@ -227,4 +225,6 @@ Day6.animate_part1(example_input, 200)
 Day6.solve_part1(puzzle_input)
 ```
 
-<!-- livebook:{"offset":4986,"stamp":{"token":"XCP.-WTEqtBzYoypdsAM-s6kp-hiFk4k0XQ-shnE8X6_Xar454MYbCCowrPBgx6Kr0Vd_cJ5YFqjsQIaO6Q0EqJunnN7HZ4vn25n1gNLi2ZG80dVcqEC2l4","version":2}} -->
+## Part 2
+
+<!-- livebook:{"offset":4996,"stamp":{"token":"XCP.r9S3IGAFmgGqY4NpycAs72xtaZVZAQM8mzCsoRJ5qnZStpkxYH3IjlbZ5e6HtIySIBxXNYvr3SkMK8ZeFQnQQslqwjXNK8iJSW1L6vavpq12ZXszf9k","version":2}} -->
