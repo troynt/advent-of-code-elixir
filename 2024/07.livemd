@@ -1,0 +1,98 @@
+# Advent of Code - Day 7
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"},
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/7
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI3Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "7", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+example_input = "190: 10 19
+3267: 81 40 27
+83: 17 5
+156: 15 6
+7290: 6 8 6 15
+161011: 16 10 13
+192: 17 8 14
+21037: 9 7 18 13
+292: 11 6 16 20"
+```
+
+```elixir
+defmodule Day7 do
+  def parse(str) do 
+    str
+      |> String.split("\n", trim: true)
+      |> Enum.map(fn eq ->
+        [x, nums] = String.split(eq, ":", limit: 2, trim: true)
+        parsed_nums = String.split(nums, " ", trim: true) |> Enum.map(&String.to_integer(&1))
+        {String.to_integer(x), parsed_nums}
+    end)
+  end
+
+  def op(nil, b, _), do: b
+  
+  def op(a, b, "0") do 
+    a+b
+  end
+
+  def op(a, b, "1") do 
+    a*b
+  end
+
+  def op(a, b, "2") do 
+    "#{a}#{b}" |> String.to_integer()
+  end
+
+  def solvable?({goal, nums}, base) do
+    len = length(nums) - 1
+    max = String.to_integer(String.duplicate("#{base-1}", len), base)
+
+    max..0 |> Enum.any?(fn i ->
+      op_combo = String.pad_leading(Integer.to_string(i, base), len, ["0"]) |> String.graphemes()
+
+      result = nums |> Enum.with_index() |> Enum.reduce(nil, fn {num, idx}, acc ->
+        op(acc, num, Enum.at(op_combo, idx - 1))
+      end)
+      result == goal
+    end)
+  end
+
+  def solve_part1(str) do
+    parse(str) |> Enum.filter(&solvable?(&1, 2)) |> Enum.reduce(0, fn {x, _}, acc -> acc + x end)
+  end
+
+  def solve_part2(str) do
+    parse(str) |> Enum.filter(&solvable?(&1, 3)) |> Enum.reduce(0, fn {x, _}, acc -> acc + x end)
+  end
+end
+```
+
+```elixir
+Day7.solve_part1(puzzle_input)
+```
+
+```elixir
+Day7.solve_part1(example_input)
+```
+
+```elixir
+Day7.solve_part2(example_input)
+```
+
+```elixir
+Day7.solve_part2(puzzle_input)
+```
+
+<!-- livebook:{"offset":2046,"stamp":{"token":"XCP.bU8vrmj5pl9kdlJ6YU_s0n5RSELZm4ERzSOQ_4xnoDWzd0oWJ06QuIUgJC26PNH4N1yOAzBVa2kUBY59eB-p5v0UbTmDSoA9NtubtLoHUyd2lbmde6U","version":2}} -->
