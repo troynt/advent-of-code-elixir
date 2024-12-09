@@ -2,7 +2,7 @@
 
 ```elixir
 Mix.install([
-  {:kino_aoc, "~> 0.1"},
+  {:kino_aoc, "~> 0.1"}
 ])
 ```
 
@@ -49,14 +49,18 @@ defmodule Day7 do
   def solvable?({goal, nums}, base) do
     len = length(nums) - 1
     max = String.to_integer(String.duplicate("#{base-1}", len), base)
+    nums_with_index = nums |> Enum.with_index()
 
     Enum.any?(0..max, fn i ->
-      op_combo = String.pad_leading(Integer.to_string(i, base), len, ["0"]) |> String.graphemes()
+      op_combo = String.pad_leading(Integer.to_string(i, base), len, "0") |> String.graphemes()
 
-      result = nums |> Enum.with_index() |> Enum.reduce(nil, fn {num, idx}, acc ->
-        op(acc, num, Enum.at(op_combo, idx - 1))
+      goal == Enum.reduce_while(nums_with_index, nil, fn {num, idx}, acc ->
+        if acc == nil || acc <= goal do
+          {:cont, op(acc, num, Enum.at(op_combo, idx - 1)) }
+        else
+          {:halt, nil }
+        end
       end)
-      result == goal
     end)
   end
 
@@ -71,10 +75,6 @@ end
 ```
 
 ```elixir
-Day7.solve_part1(puzzle_input)
-```
-
-```elixir
 Day7.solve_part1(example_input)
 ```
 
@@ -83,7 +83,13 @@ Day7.solve_part2(example_input)
 ```
 
 ```elixir
+Day7.solve_part1(puzzle_input)
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
 Day7.solve_part2(puzzle_input)
 ```
 
-<!-- livebook:{"offset":2012,"stamp":{"token":"XCP._8NSLuLnTWEmkLcKIlO-0XdgAIbDk9TNbcGxv1i-EIrq84NO8BvU1E2gEsgwutesv_AtvIgFduB4jZxTdt7KitX0Ro3F4geveYE1_aptaG7uTnaA_8k","version":2}} -->
+<!-- livebook:{"offset":2183,"stamp":{"token":"XCP.bmhGg2bvDusCM-fXEsJ9kVau2X1wFuYKC1VLEj6BdL_VidUAjkKiQ8eLOg0hUP98Lvidd3uniZJpW3bKPwCIMdX-hOUjEXfW-PDEklQaPmzt3LEs7Ow","version":2}} -->
