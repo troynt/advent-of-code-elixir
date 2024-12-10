@@ -34,7 +34,6 @@ example_input = "............
 
 ```elixir
 defmodule Day8 do
-
   def antennas(map) do
     map 
       |> Map.filter(fn {_,v} -> v != "." && v != "#" end)
@@ -45,11 +44,11 @@ defmodule Day8 do
     for i <- antennas, j <- antennas, i != j, do: [i,j]
   end
 
-  def find_antinodes(map) do
-    Day8.antennas(map) |> Enum.flat_map(fn {_, antennas} ->
-      Day8.pairs(antennas)
+  def find_antinodes(map, cb) do
+    antennas(map) |> Enum.flat_map(fn {_, antennas} ->
+      pairs(antennas)
         |> Enum.flat_map(fn p ->
-            Day8.antinodes(p, map)
+            cb.(p, map)
            end)
       end) |> MapSet.new()
   end
@@ -59,7 +58,7 @@ defmodule Day8 do
 
     {ax, ay} = a_pos
     {bx, by} = b_pos
-    
+
     [
       {ax + dx, ay + dy},
       {bx - dx, by - dy}
@@ -71,27 +70,56 @@ defmodule Day8 do
     |> Enum.filter(fn x -> x != nil end)
   end
 
+  def compute_bounds(map) do
+    Enum.reduce(map, %{xmax: 0, ymax: 0}, fn {{x, y}, _}, acc ->
+      %{xmax: max(acc.xmax, x), ymax: max(acc.ymax, y)}
+    end)
+  end
+
+  def antinodes2([{a_pos, _}, {b_pos, _}], map) do
+    bounds = compute_bounds(map)
+    {dx, dy} = delta_pos(a_pos, b_pos)
+
+    {ax, ay} = a_pos
+
+    yiter = ceil(bounds.ymax / dy)
+    xiter = ceil(bounds.xmax / dx)
+
+    bound = max(yiter, xiter)
+
+    Enum.reduce(-bound..bound, [], fn magnitude, acc ->
+      pt = {ax + (magnitude*dx), ay + (magnitude*dy)}
+      if Map.get(map, pt) do
+        acc ++ [pt]
+      else
+        acc
+      end
+    end)
+  end
+
   def delta_pos({ax, ay}, {bx, by}) do
     {ax - bx, ay - by}
   end
-  
+    
   def parse(str) do
-    [{_, _}] = Regex.run(~r/\n/, str, return: :index)
-
-    grid = str |> String.split("\n")
+    str
+    |> String.split("\n", trim: true)
+    |> Enum.with_index()
+    |> Enum.flat_map(fn {row, y} ->
+      row
+      |> String.graphemes()
       |> Enum.with_index()
-      |> Enum.reduce([], fn {row, idx}, acc ->
-        res = row |> String.graphemes() |> Enum.with_index() |> Enum.map(fn {char, char_idx} ->
-          {{char_idx, idx}, char}
-        end)
-        acc ++ res
-      end)
-
-    grid |> Map.new()
+      |> Enum.map(fn {char, x} -> {{x, y}, char} end)
+    end)
+    |> Enum.into(%{})
   end
 
   def solve_part1(str) do
-    parse(str) |> find_antinodes() |> MapSet.size()
+    parse(str) |> find_antinodes(&antinodes(&1,&2)) |> MapSet.size()
+  end
+
+  def solve_part2(str) do
+    parse(str) |> find_antinodes(&antinodes2(&1,&2)) |> MapSet.size()
   end
 end
 ```
@@ -121,4 +149,22 @@ example2 = "T....#....
 .........."
 ```
 
-<!-- livebook:{"offset":2319,"stamp":{"token":"XCP.LzVlq5ByczrrF2miX7sjJR30H8GigtSqKGoliDupEoA1PBrebWvOH1xQSZaGqNq9MTkrfLFOI-E47ioBQpcHFlWFrmrEbltqKuMDIxkcisYUzlpFOzs","version":2}} -->
+```elixir
+Day8.antennas(Day8.parse(example2))
+```
+
+```elixir
+Day8.solve_part2(example2)
+```
+
+```elixir
+Day8.solve_part2(example_input)
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day8.solve_part2(puzzle_input)
+```
+
+<!-- livebook:{"offset":3175,"stamp":{"token":"XCP.RM3qquPG90Wz8_Vs2Lm7fF1_O7US3X41YfkpaSdwXqHz_KnCBuskSo_6qlgfcqgD0G7wILHUgw_cspgAC0-p7-MMcePNhSp1__tE9789DbgopX5TIjE","version":2}} -->
