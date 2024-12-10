@@ -1,0 +1,124 @@
+# Advent of Code - Day 8
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/8
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI4Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "8", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+example_input = "............
+........0...
+.....0......
+.......0....
+....0.......
+......A.....
+............
+............
+........A...
+.........A..
+............
+............"
+```
+
+```elixir
+defmodule Day8 do
+
+  def antennas(map) do
+    map 
+      |> Map.filter(fn {_,v} -> v != "." && v != "#" end)
+      |> Enum.group_by(fn {_,v} -> v end)
+  end
+
+  def pairs(antennas) do
+    for i <- antennas, j <- antennas, i != j, do: [i,j]
+  end
+
+  def find_antinodes(map) do
+    Day8.antennas(map) |> Enum.flat_map(fn {_, antennas} ->
+      Day8.pairs(antennas)
+        |> Enum.flat_map(fn p ->
+            Day8.antinodes(p, map)
+           end)
+      end) |> MapSet.new()
+  end
+
+  def antinodes([{a_pos, _}, {b_pos, _}], map) do
+    {dx, dy} = delta_pos(a_pos, b_pos)
+
+    {ax, ay} = a_pos
+    {bx, by} = b_pos
+    
+    [
+      {ax + dx, ay + dy},
+      {bx - dx, by - dy}
+    ] |> Enum.map(fn p ->
+      if Map.get(map, p) do
+        p
+      end
+    end) 
+    |> Enum.filter(fn x -> x != nil end)
+  end
+
+  def delta_pos({ax, ay}, {bx, by}) do
+    {ax - bx, ay - by}
+  end
+  
+  def parse(str) do
+    [{_, _}] = Regex.run(~r/\n/, str, return: :index)
+
+    grid = str |> String.split("\n")
+      |> Enum.with_index()
+      |> Enum.reduce([], fn {row, idx}, acc ->
+        res = row |> String.graphemes() |> Enum.with_index() |> Enum.map(fn {char, char_idx} ->
+          {{char_idx, idx}, char}
+        end)
+        acc ++ res
+      end)
+
+    grid |> Map.new()
+  end
+
+  def solve_part1(str) do
+    parse(str) |> find_antinodes() |> MapSet.size()
+  end
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day8.solve_part1(example_input)
+```
+
+```elixir
+Day8.solve_part1(puzzle_input)
+```
+
+## Part 2
+
+```elixir
+example2 = "T....#....
+...T......
+.T....#...
+.........#
+..#.......
+..........
+...#......
+..........
+....#.....
+.........."
+```
+
+<!-- livebook:{"offset":2319,"stamp":{"token":"XCP.LzVlq5ByczrrF2miX7sjJR30H8GigtSqKGoliDupEoA1PBrebWvOH1xQSZaGqNq9MTkrfLFOI-E47ioBQpcHFlWFrmrEbltqKuMDIxkcisYUzlpFOzs","version":2}} -->
