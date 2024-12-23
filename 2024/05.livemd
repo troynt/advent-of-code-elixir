@@ -23,21 +23,22 @@ I have yet to complete part 2. I feel it could be done with topological sort of 
 defmodule Day5 do  
 
   def parse_rules(rules) do
-    String.split(rules, ["\n", "|"], trim: true) 
-      |> Enum.map(&String.to_integer(&1))
-      |> Enum.chunk_every(2, 2)
-      |> Enum.reduce(%{}, fn [a,b], map ->
-        map |> Map.update(a, MapSet.new([b]), fn set -> MapSet.put(set, b) end)
-            |> Map.update(b, MapSet.new(), fn set -> set end)
-      end)
+    rules
+    |> String.split(["\n", "|"], trim: true)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.chunk_every(2)
+    |> Enum.reduce(%{}, fn [a, b], map ->
+      map
+      |> Map.update(a, MapSet.new([b]), &MapSet.put(&1, b))
+      |> Map.put_new(b, MapSet.new())
+    end)
   end
   
   def parse(str) do
     [rules, updates] = String.split(str, "\n\n")
 
-    updates = String.split(updates, "\n") |> Enum.map(fn x ->
-      String.split(x, ",") |> Enum.map(&String.to_integer/1)
-    end)
+    updates = String.split(updates, "\n")
+      |> Enum.map(fn x -> String.split(x, ",") |> Enum.map(&String.to_integer/1) end)
     
     rules = parse_rules(rules)
 
@@ -62,6 +63,38 @@ defmodule Day5 do
     Enum.filter(updates, fn pages ->
       correct_order?(pages, rules)
     end)
+    |> add_middle_pages()
+  end
+
+  def sort(list, rules) do
+    Enum.reduce_while(list, list, fn _, current_list ->
+      sorted = do_sort(current_list, [], rules)
+
+      if sorted == current_list do
+        {:halt, sorted}
+      else
+        {:cont, sorted}
+      end
+    end)
+  end
+
+  def do_sort([], acc, _), do: acc
+
+  def do_sort([head], acc, _), do: acc ++ [head]
+
+  def do_sort([first, second | tail], acc, rules) do
+    if correct_order?([first, second], rules) do
+      do_sort([second | tail], acc ++ [first], rules)
+    else
+      do_sort([first | tail], acc ++ [second], rules)
+    end
+  end
+
+  def solve_part2(str) do
+    { rules, updates } = parse(str)
+    updates
+    |> Enum.reject(&correct_order?(&1, rules))
+    |> Enum.map(&sort(&1, rules))
     |> add_middle_pages()
   end
 end
@@ -102,4 +135,10 @@ example_input = "47|53
 Day5.solve_part1(puzzle_input)
 ```
 
-<!-- livebook:{"offset":2057,"stamp":{"token":"XCP.HDzVhW991CEpJV8GoItv8bq1-geGfQKVedeBIOmQXKggQdFCSPTLgmzf3vmCH0MJz8IChvyIQlouQ36DioNV0w2U1S9pNemeH9WwJzlO1_SniLlS3Kc","version":2}} -->
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day5.solve_part2(puzzle_input)
+```
+
+<!-- livebook:{"offset":2871,"stamp":{"token":"XCP.c1LpKTePAR7v2GM8qkoQ0hIxMX27LPhQuT5NSCOEaQFlacbaFrsvpD7hLLOcvsST1CLsy0N-LYzo1WB3okF0HL6deFDsHL9X9wyJM7Wcn_RmFQg1ORc","version":2}} -->
