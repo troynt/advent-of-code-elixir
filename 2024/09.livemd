@@ -1,0 +1,133 @@
+# Advent of Code - Day 9
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"},
+  {:apex, "~>1.2.1"}
+])
+```
+
+## Problem
+
+https://adventofcode.com/2024/day/9
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJwdXp6bGVfaW5wdXQiLCJkYXkiOiI5Iiwic2Vzc2lvbl9zZWNyZXQiOiJBT0NfU0VTU0lPTiIsInllYXIiOiIyMDI0In0","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, puzzle_input} =
+  KinoAOC.download_puzzle("2024", "9", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+```elixir
+example_input = "2333133121414131402"
+```
+
+```elixir
+small_example = "12345"
+```
+
+```elixir
+defmodule Day9 do
+
+  def parse(str) do
+    str
+    |> String.split("", trim: true)
+    |> Enum.map(&String.to_integer(&1))
+    |> Enum.chunk_every(2)
+    |> Enum.map(fn # file_len, free_len, slots_occupied by free
+      [file_len, free_len] -> {file_len, free_len, []}
+      [file_len] -> {file_len, 0, []}
+    end)
+    |> Enum.with_index()
+    |> Enum.reduce(Map.new(), fn {val, idx}, acc ->
+      Map.put(acc, idx, val)
+    end)
+  end
+
+  def defrag(diskmap) do
+    file_count = length(Map.keys(diskmap))
+    defrag(diskmap, 0, file_count - 1)
+  end
+
+  def defrag(diskmap, _, 0), do: diskmap
+  def defrag(diskmap, a, b) when a == b, do: diskmap
+
+  def defrag(diskmap, cur_free_p, cur_p) do
+    {file_len, free_len, blocks } = Map.get(diskmap, cur_free_p)
+    if free_len == 0 do
+      defrag(diskmap, cur_free_p + 1, cur_p)
+    else
+      {src_file_len, src_free_len, src_blocks } = Map.get(diskmap, cur_p)
+      if src_file_len == 0 do
+        defrag(diskmap, cur_free_p, cur_p - 1)
+      else
+        diskmap
+        |> Map.put(cur_free_p, { file_len, free_len - 1, [cur_p | blocks]})
+        |> Map.put(cur_p, { src_file_len - 1, src_free_len + 1, src_blocks })
+        |> defrag(cur_free_p, cur_p)
+      end
+    end
+  end
+
+  def calc_sum(start, scalar, terms) do
+    sum = terms * (2 * start + terms - 1) / 2
+    round(scalar * sum)
+  end
+
+  def calc_block_sum(start_id, blocks) do
+    #IO.inspect("start: #{start_id}")
+
+    blocks
+    |> Enum.reverse()
+    |> Enum.with_index()
+    |> Enum.reduce(0, fn {x, idx}, acc ->
+      acc + ((start_id + idx) * x)
+    end)
+  end
+
+  def checksum_block({block_id, {file_len, _, blocks}}, cur_p) do
+      ws = calc_sum(cur_p, block_id, file_len)
+      #Apex.ap([ws,  calc_block_sum(cur_p + file_len, blocks)])
+
+      { cur_p + file_len + length(blocks), ws + calc_block_sum(cur_p + file_len, blocks)}
+  end
+
+  def render(diskmap) do
+    file_count = length(Map.keys(diskmap))
+    Enum.reduce(0..file_count - 1, "", fn block_id, acc -> 
+      {file_len, free_len, blocks} = Map.get(diskmap, block_id)
+      a = List.duplicate(block_id, file_len) |> Enum.join("")
+      free = List.duplicate(".", free_len) |> Enum.join("")
+      b = Enum.join(Enum.reverse(blocks), "")
+
+      acc <> a <> free <> b
+      end)
+  end
+
+  
+  def checksum(diskmap) do
+    {_, sum } = Enum.reduce(diskmap, {0, 0}, fn block, {cur_p, acc} ->
+      {end_id, sum } = checksum_block(block, cur_p)
+
+      { end_id, acc + sum }
+    end)
+
+    sum
+  end
+
+  def solve_part1(str) do
+    parse(str)
+    |> defrag()
+    |> render()
+  end
+
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day9.solve_part1(puzzle_input) |> Apex.ap 
+```
+
+<!-- livebook:{"offset":3256,"stamp":{"token":"XCP.BVFT17SdnEmMooHhsWRC8S_WJZ0H3gTlvpJJ_-WrIgCDf_qAgAyobMzaStczsD9Cw6pNFduqVyyTn6v1BJvyPrzPlK2WUGjCthiyJf5XwajmTeZZSuo","version":2}} -->
