@@ -32,15 +32,11 @@ defmodule Day9 do
   def parse(str) do
     str
     |> String.split("", trim: true)
-    |> Enum.map(&String.to_integer(&1))
-    |> Enum.chunk_every(2)
-    |> Enum.map(fn # file_len, free_len, slots_occupied by free
-      [file_len, free_len] -> {file_len, free_len, []}
-      [file_len] -> {file_len, 0, []}
-    end)
+    |> Enum.map(&String.to_integer/1)
+    |> Enum.chunk_every(2, 2, [0]) # this handles odd length inputs
     |> Enum.with_index()
-    |> Enum.reduce(Map.new(), fn {val, idx}, acc ->
-      Map.put(acc, idx, val)
+    |> Enum.into(%{}, fn {[file_len, free_len], idx} ->
+      {idx, {file_len, free_len, []}}
     end)
   end
 
@@ -86,10 +82,9 @@ defmodule Day9 do
   end
 
   def checksum_block({block_id, {file_len, _, blocks}}, cur_p) do
-      ws = calc_sum(cur_p, block_id, file_len)
-      #Apex.ap([ws,  calc_block_sum(cur_p + file_len, blocks)])
-
-      { cur_p + file_len + length(blocks), ws + calc_block_sum(cur_p + file_len, blocks)}
+    ws = calc_sum(cur_p, block_id, file_len)
+    total_blocks = calc_block_sum(cur_p + file_len, blocks)
+    {cur_p + file_len + length(blocks), ws + total_blocks}
   end
 
   def render(diskmap) do
@@ -118,7 +113,7 @@ defmodule Day9 do
   def solve_part1(str) do
     parse(str)
     |> defrag()
-    |> render()
+    |> checksum()
   end
 
 end
@@ -130,4 +125,4 @@ end
 Day9.solve_part1(puzzle_input) |> Apex.ap 
 ```
 
-<!-- livebook:{"offset":3256,"stamp":{"token":"XCP.BVFT17SdnEmMooHhsWRC8S_WJZ0H3gTlvpJJ_-WrIgCDf_qAgAyobMzaStczsD9Cw6pNFduqVyyTn6v1BJvyPrzPlK2WUGjCthiyJf5XwajmTeZZSuo","version":2}} -->
+<!-- livebook:{"offset":3106,"stamp":{"token":"XCP.KOkmUnRjyWWOmwyrybQ2qRq39N3rJSzCoNCy2IyVww7bS8nsdxoSxXoxhndX8ZQ6wFyhpb4xHEjceFU044iATckcol_wuLWKeYBLgzWc53Z7955oLPU","version":2}} -->
