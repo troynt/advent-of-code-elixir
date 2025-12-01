@@ -1,0 +1,132 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 1
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Part 1
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJpbnB1dCIsImRheSI6IjEiLCJzZXNzaW9uX3NlY3JldCI6IkFPQ19TRVNTSU9OIiwieWVhciI6IjIwMjUifQ","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, input} = KinoAOC.download_puzzle("2025", "1", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "L1\nR43\nR6\nR50\nR47\nR18\nL12\nL21\nR21\nR38\nR15\nR1\nL19\nR36\nL33\nR25\nL6\nR25\nL7\nL44\nR16\nL43\nR27\nL26\nR17\nR32\nR49\nL39\nR22\nL1\nL10\nR24\nL23\nR10\nR13\nL34\nL34\nL32\nR2\nL14\nL26\nL46\nL42\nR35\nR21\nR38\nL8\nL15\nL29\nL52\nL10\nL54\nR7\nR35\nL16\nL99\nL60\nR33\nL38\nL62\nL5\nL42\nL53\nR33\nL68\nL27\nR19\nL57\nR36\nR64\nL27\nR84\nR32\nR11\nL39\nL22\nL11\nR72\nR78\nL3\nL75\nL52\nR71\nR81\nR59\nL73\nR62\nL57\nL56\nL99\nR64\nR63\nR64\nL77\nL50\nR57\nR43\nR86\nL86\nR9\nL9\nR95\nR430\nL5\nR27\nR86\nR67\nL97\nL29\nL993\nL14\nL27\nR21\nL205\nR913\nR74\nR57\nR63\nL754\nR791\nL21\nL28\nR91\nL63\nL79\nR61\nR61\nL622\nL58\nL69\nR879\nL64\nL718\nL23\nL47\nR26\nR74\nR30\nR46\nR74\nR850\nR53\nL775\nL78\nR8\nL21\nR713\nL95\nL27\nR37\nL9\nL36\nR10\nL96\nR34\nL27\nL36\nR45\nR33\nL93\nR60\nL97\nR3\nR94\nR8\nR50\nR67\nR975\nR83\nL27\nL42\nR86\nR904\nL30\nL81\nR7\nL43\nR612\nL67\nL7\nR45\nR63\nR97\nR41\nR29\nL224\nR56\nL38\nL64\nR63\nL21\nL94\nR52\nL61\nL39\nR892\nL92\nR775\nL28\nR91\nR70\nR87\nL52\nR57\nR97\nL27\nL97\nL673\nR44\nR63\nL96\nL7\nL36\nR2\nR25\nR44\nL54\nL85\nL89\nL61\nR50\nR17\nL35\nL382\nR67\nL928\nL12\nL553\nR26\nR7\nR93\nL10\nR10\nR92\nR257\nL5\nR72\nR84\nL98\nL2\nL823\nR85\nL50\nL412\nL80\nR227\nL354\nL93\nL4\nL796\nL834\nR62\nL903\nL46\nL79\nR428\nL28\nL20\nL139\nL41\nR82\nR18\nR87\nR99\nR14\nR970\nR30\nL58\nL54\nL29\nL54\nL5\nR43\nL685\nR542\nR618\nR482\nL536\nL43\nR36\nR27\nL84\nR37\nL14\nL14\nL73\nR5\nL41\nL21\nL779\nR39\nR61\nL99\nL58\nL484\nR3\nL36\nR37\nL99\nL64\nR94\nR34\nL28\nL9\nR45\nL23\nL65\nR91\nR61\nL880\nL16\nL104\nR76\nR23\nR1\nR149\nL47\nR70\nR14\nL16\nR81\nR49\nL33\nL67\nR677\nL77\nL420\nR120\nR59\nL59\nR90\nL47\nL37\nL6\nR71\nL71\nR82\nR78\nR40\nR39\nL54\nR82\nL9\nR2\nR41\nR99\nR9\nR91\nL69\nR69\nL41\nR41\nL482\nR19\nR388\nR75\nL38\nL62\nL5\nR5\nL46\nR93\nR645\nR8\nR1\nL1\nL7\nL875\nL807\nL57\nR46\nR55\nR45\nL89\nL4\nR11\nR26\nL613\nR469\nL60\nR84\nR69\nR7\nR159\nR24\nL47\nR51\nR13\nL878\nL22\nL220\nL29\nR48\nR29\nL37\nR75\nR42\nR87\nL95\nR21\nR179\nL188\nL54\nR42\nL56\nL46\nL39\nL493\nL74\nR9\nL81\nR24\nL28\nL57\nL46\nL13\nR11\nL22\nL96\nR7\nL94\nL82\nR99\nR12\nR65\nL83\nL17\nL47\nL53\nL263\nL46\nL5\nR714\nR990\nR14\nL53\nL36\nR85\nL3\nL97\nL66\nR766\nL61\nR661\nL25\nL5\nR65\nL75\nL560\nR72\nR556\nR9\nL7\nR170\nR20\nR40\nL860\nL21\nR50\nR524\nR47\nL304\nR12\nR41\nL55\nL5\nL48\nR428\nR313\nR68\nR410\nR2\nL687\nR25\nR37\nR22\nR12\nL9\nR38\nR54\nR243\nL89\nL8\nR29\nL66\nL63\nL815\nR115\nL69\nR71\nR98\nR70\nR31\nL22\nR21\nR47\nR16\nR37\nL80\nL65\nR45\nR55\nL355\nL23\nL48\nR93\nR78\nL23\nL44\nR24\nL38\nL7\nL12\nR73\nL67\nR94\nL13\nL87\nR31\nL59\nR54\nR180\nL404\nL776\nR36\nL590\nR28\nL77\nL914\nR54\nL963\nR70\nR13\nR517\nL46\nR46\nL13\nL28\nR38\nR39\nL36\nR33\nL33\nR689\nR85\nR56\nR615\nL45\nL51\nR812\nR39\nR83\nL686\nL49\nL48\nL82\nL52\nR34\nR52\nR88\nL71\nL69\nR46\nR54\nL17\nR17\nR70\nL70\nL641\nL362\nR17\nL6\nL8\nR4\nR96\nR514\nL20\nL75\nR37\nR37\nR7\nL74\nR56\nL51\nL31\nR42\nR94\nL25\nL11\nL31\nL8\nL761\nR26\nR74\nL102\nR2\nL67\nR3\nR94\nR95\nL47\nL19\nL19\nL40\nR177\nL37\nL40\nL46\nR20\nR126\nR89\nR40\nR17\nR876\nR251\nL37\nR758\nR6\nR96\nL20\nR24\nR472\nR28\nL83\nL17\nR588\nL244\nR312\nR15\nR13\nL284\nL36\nL20\nL820\nL14\nR74\nL84\nL49\nR49\nL92\nR86\nR59\nR181\nR66\nL74\nR637\nR52\nL15\nL21\nR21\nR83\nR12\nR5\nL83\nR201\nR31\nL63\nL45\nR97\nR22\nR34\nR14\nL542\nL29\nR63\nL521\nR12\nL32\nL956\nL21\nR71\nR47\nR119\nR81\nR56\nL56\nR610\nR90\nR12\nR408\nR580\nL68\nR99\nL58\nR23\nR604\nR72\nL30\nL89\nR893\nL54\nL92\nR51\nL7\nR77\nL21\nL66\nL55\nL96\nR17\nR4\nL842\nL62\nR53\nR347\nL250\nR50\nR34\nR666\nR4\nL37\nL724\nL43\nR10\nL110\nR1\nL1\nR331\nR435\nR38\nL739\nR82\nR78\nR75\nR1\nR99\nL29\nL28\nL906\nR53\nR30\nR93\nL19\nL27\nL67\nR49\nL76\nR15\nL56\nL76\nR11\nL70\nR213\nL10\nR97\nL438\nR55\nL22\nR8\nL42\nR12\nL270\nR82\nL279\nL694\nR70\nR41\nR74\nL41\nR71\nL96\nL294\nR59\nL693\nL17\nR815\nL99\nR19\nR82\nL81\nR32\nL78\nR27\nL36\nR17\nR97\nR32\nR90\nL85\nL15\nL24\nL76\nL489\nR34\nR355\nL99\nL943\nL180\nR22\nR38\nR62\nR39\nL239\nL54\nL67\nL65\nR81\nL21\nR254\nR30\nR39\nR992\nL54\nL182\nL453\nL31\nR31\nL18\nL2\nL539\nR4\nR71\nL968\nR52\nR68\nR32\nR10\nR665\nR86\nR31\nL83\nL82\nR73\nL81\nL19\nR714\nR86\nR96\nR4\nR653\nL52\nR920\nR379\nR47\nL8\nL36\nR46\nL49\nR32\nL932\nR50\nL950\nL67\nR405\nL538\nL76\nL24\nR93\nR53\nL46\nR43\nL543\nR93\nR2\nR6\nR412\nL93\nL85\nR61\nL57\nR76\nL115\nL67\nL33\nL814\nL62\nL24\nR73\nL73\nL46\nL14\nR125\nR35\nR15\nL31\nL56\nL28\nR96\nL98\nR17\nL15\nR53\nR27\nL80\nL31\nR16\nL74\nL111\nL662\nR353\nR52\nR92\nL172\nL74\nR11\nL8\nL92\nL4\nR46\nR41\nL283\nR63\nR26\nL31\nL958\nR28\nR72\nL55\nR43\nR9\nL97\nL8\nR8\nR877\nL44\nR23\nL56\nR75\nL75\nL777\nR1\nL24\nL83\nL17\nR43\nR24\nR1\nL42\nL84\nR758\nL18\nR63\nR32\nR71\nL741\nR85\nR56\nR55\nL11\nL50\nL85\nR56\nR8\nR46\nL353\nL99\nL615\nL612\nL28\nL531\nL29\nR88\nL88\nR34\nL69\nR423\nL84\nL34\nR30\nL42\nR51\nL81\nR61\nR233\nR52\nL374\nR85\nL20\nL32\nL4\nR83\nL471\nR46\nL6\nR87\nR32\nR55\nL618\nL39\nL98\nL29\nL41\nR25\nL19\nL936\nL39\nL61\nL61\nL36\nL303\nR44\nL2\nL97\nR41\nR35\nL21\nL72\nR72\nL85\nL266\nR3" <> ...}
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+ex = "L68
+L30
+R48
+L5
+R60
+L55
+L1
+L99
+R14
+L82"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"L68\nL30\nR48\nL5\nR60\nL55\nL1\nL99\nR14\nL82"
+```
+
+```elixir
+defmodule Day1 do
+
+  def parse(str) do
+    nums = String.split(str, ~r/\W+/, trim: true) |> Enum.map(fn x ->
+      {dir, amt} = String.split_at(x,1)
+      {dir, String.to_integer(amt)}
+    end)
+    nums
+  end
+
+  def perform_rotation(pos, delta), do: perform_rotation(pos, delta, 0)
+
+  def perform_rotation(pos, delta, clicks) do
+    cond do
+      delta >= 100 -> perform_rotation(pos, delta - 100, clicks + 1)
+      delta <= -100 -> perform_rotation(pos, delta + 100, clicks + 1)
+      pos + delta == 0 -> { pos + delta, clicks + 1 }
+      pos != 0 && pos + delta < 0 -> { pos + delta + 100, clicks + 1 }
+      pos != 0 && pos + delta >= 100 -> {pos + delta - 100, clicks + 1 }
+      pos == 0 && pos + delta < 0 -> { pos + delta + 100, clicks }
+      pos == 0 && pos + delta >= 100 -> {pos + delta - 100, clicks }
+      
+      true -> { pos + delta, clicks }
+    end
+  end
+  
+  def turn(cur_pos, {"L", x}), do: perform_rotation(cur_pos, -x)
+
+  def turn(cur_pos, {"R", x}), do: perform_rotation(cur_pos, x)
+
+  def solve(str) do
+    instructions = parse(str)
+    { _, zero_count } = Enum.reduce(instructions, {50, 0}, fn (ins, {pos, zero_count }) ->
+      {pos, _ } = turn(pos, ins)
+
+      if pos == 0 do
+        {pos, zero_count + 1}
+      else
+        { pos, zero_count }
+      end
+
+    end)
+
+    zero_count
+  end
+  
+  def solve2(str) do
+    instructions = parse(str)
+    { _, click_count } = Enum.reduce(instructions, {50, 0}, fn ({dir, amt}, {pos, click_count }) ->
+      {pos, clicks} = turn(pos, {dir, amt})
+
+      IO.puts(dir <> to_string(amt) <> " pos " <> to_string(pos) <> " clicks " <> to_string(clicks))
+
+      { pos, clicks + click_count }
+
+    end)
+
+    click_count
+  end
+end
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day1.solve(ex)
+```
+
+```elixir
+Day1.solve(input)
+```
+
+<!-- livebook:{"branch_parent_index":0} -->
+
+## Part 2
+
+```elixir
+Day1.solve2(ex)
+```
+
+```elixir
+Day1.solve2(input)
+```
+
+<!-- livebook:{"offset":7741,"stamp":{"token":"XCP.8MfboQ4Z6HP5NpTVrfgSIXxwMSVSHLPk-sZEVDB-rzE1jLv-bOsGJYmjEH75zstHST6J4gasjohgODLpO7rSPuNHWHPJeB5IfjMvWuG2Mm-u079KNgA","version":2}} -->
