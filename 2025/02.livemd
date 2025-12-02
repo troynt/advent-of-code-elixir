@@ -1,0 +1,225 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 2
+
+```elixir
+Mix.install([
+  {:kino_aoc, "~> 0.1"}
+])
+```
+
+## Setup
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJpbnB1dCIsImRheSI6IjIiLCJzZXNzaW9uX3NlY3JldCI6IkFPQ19TRVNTSU9OIiwieWVhciI6IjIwMjUifQ","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, input} = KinoAOC.download_puzzle("2025", "2", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "8123221734-8123333968,2665-4538,189952-274622,4975-9031,24163352-24202932,1233-1772,9898889349-9899037441,2-15,2147801-2281579,296141-327417,8989846734-8989940664,31172-42921,593312-632035,862987-983007,613600462-613621897,81807088-81833878,13258610-13489867,643517-782886,986483-1022745,113493-167913,10677-16867,372-518,3489007333-3489264175,1858-2534,18547-26982,16-29,247-366,55547-103861,57-74,30-56,1670594-1765773,76-129,134085905-134182567,441436-566415,7539123416-7539252430,668-1146,581563513-581619699"}
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+ex = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
+```
+
+```elixir
+String.duplicate("ho", 3)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"hohoho"
+```
+
+## Solution
+
+```elixir
+defmodule Day2 do
+
+  def parse(str) do
+    String.split(str, ~r/,/, trim: true) |> Enum.map(fn x ->
+      [start_pid, end_pid] = String.split(x,~r/-/)
+      String.to_integer(start_pid)..String.to_integer(end_pid)
+    end)
+  end
+
+  def is_valid?(pid) do
+    pid_str = pid |> Integer.to_string()
+    pid_len = String.length(pid_str)
+
+    if rem(pid_len, 2) == 1 do
+      true
+    else
+      half = String.slice(pid_str, 0..Integer.floor_div(pid_len - 1,2))
+      pid_str != half <> half
+    end
+  end
+
+
+  def is_valid2?(pid) do
+    pid_str = pid |> Integer.to_string()
+    pid_len = String.length(pid_str)
+
+    needles =  0..Integer.floor_div(pid_len - 1,2)
+      |> Enum.to_list()
+      |> Enum.filter(fn x -> rem(pid_len, x + 1) == 0 end)
+      |> Enum.map(fn x -> String.slice(pid_str, 0..x) end)
+      |> Enum.filter(fn x -> x != pid_str end)
+      |> Enum.map(fn x -> String.duplicate(x, Integer.floor_div(pid_len, String.length(x))) end)
+
+    found = needles |> Enum.any?(fn x -> x == pid_str end)
+
+    !found
+  end
+
+  def solve(str) do
+    pids = parse(str)
+      |> Enum.flat_map(&Enum.to_list/1)
+
+    pids
+      |> Enum.reject(&is_valid?/1)
+      |> Enum.sum()
+  end
+
+  def solve2(str) do
+    pids = parse(str)
+      |> Enum.flat_map(&Enum.to_list/1)
+
+    pids 
+      |> Enum.reject(&is_valid2?/1)
+      |> Enum.sum()
+  end
+
+end
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day2, <<70, 79, 82, 49, 0, 0, 19, ...>>, {:solve2, 1}}
+```
+
+## Part 1
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.parse(ex)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[11..22, 95..115, 998..1012, 1188511880..1188511890, 222220..222224, 1698522..1698528,
+ 446443..446449, 38593856..38593862, 565653..565659, 824824821..824824827, 2121212118..2121212124]
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.is_valid?(11)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+false
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.is_valid?(101)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+true
+```
+
+```elixir
+Day2.is_valid?(110)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+true
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.solve(ex)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+1227775554
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.solve(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+55916882972
+```
+
+<!-- livebook:{"branch_parent_index":1} -->
+
+## Part 2
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day2.is_valid2?(12)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+true
+```
+
+```elixir
+Day2.is_valid2?(111)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+false
+```
+
+```elixir
+Day2.solve2(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+76169125915
+```
+
+<!-- livebook:{"offset":4347,"stamp":{"token":"XCP.6_Bs-oN0hWS7tJA7SXUah7DQb7Bipi2-N8oN6lq_IjEHIv4BvyV6mKlF_NXkrjTrlrJ70p89xM7BaNP55Y-o_S9QO7i1vjz2wTOb0dNQQI9bTLDw1EM","version":2}} -->
