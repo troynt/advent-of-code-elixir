@@ -49,6 +49,7 @@ String.duplicate("ho", 3)
 
 ```elixir
 defmodule Day2 do
+  @regex ~r/^(\d+)\1+$/
 
   def parse(str) do
     String.split(str, ~r/,/, trim: true) |> Enum.map(fn x ->
@@ -69,39 +70,28 @@ defmodule Day2 do
     end
   end
 
-
-  def is_valid2?(pid) do
-    pid_str = pid |> Integer.to_string()
-    pid_len = String.length(pid_str)
-
-    needles =  0..Integer.floor_div(pid_len - 1,2)
-      |> Enum.to_list()
-      |> Enum.filter(fn x -> rem(pid_len, x + 1) == 0 end)
-      |> Enum.map(fn x -> String.slice(pid_str, 0..x) end)
-      |> Enum.filter(fn x -> x != pid_str end)
-      |> Enum.map(fn x -> String.duplicate(x, Integer.floor_div(pid_len, String.length(x))) end)
-
-    found = needles |> Enum.any?(fn x -> x == pid_str end)
-
-    !found
+  def solve_range(range) do
+    range |> Enum.reject(&is_valid?/1) |> Enum.sum()
   end
 
   def solve(str) do
-    pids = parse(str)
-      |> Enum.flat_map(&Enum.to_list/1)
+    parse(str)
+      |> Task.async_stream(&solve_range/1)
+      |> Enum.reduce(0, fn {:ok, v}, acc -> acc + v end)
+  end
 
-    pids
-      |> Enum.reject(&is_valid?/1)
-      |> Enum.sum()
+  def is_valid2?(pid) do
+    Regex.run(@regex, Integer.to_string(pid)) == nil
+  end
+  
+  def solve_range2(range) do
+    range |> Enum.reject(&is_valid2?/1) |> Enum.sum()
   end
 
   def solve2(str) do
-    pids = parse(str)
-      |> Enum.flat_map(&Enum.to_list/1)
-
-    pids 
-      |> Enum.reject(&is_valid2?/1)
-      |> Enum.sum()
+    parse(str)
+      |> Task.async_stream(&solve_range2/1)
+      |> Enum.reduce(0, fn {:ok, v}, acc -> acc + v end)
   end
 
 end
@@ -110,7 +100,7 @@ end
 <!-- livebook:{"output":true} -->
 
 ```
-{:module, Day2, <<70, 79, 82, 49, 0, 0, 19, ...>>, {:solve2, 1}}
+{:module, Day2, <<70, 79, 82, 49, 0, 0, 18, ...>>, {:solve2, 1}}
 ```
 
 ## Part 1
@@ -222,4 +212,4 @@ Day2.solve2(input)
 76169125915
 ```
 
-<!-- livebook:{"offset":4347,"stamp":{"token":"XCP.6_Bs-oN0hWS7tJA7SXUah7DQb7Bipi2-N8oN6lq_IjEHIv4BvyV6mKlF_NXkrjTrlrJ70p89xM7BaNP55Y-o_S9QO7i1vjz2wTOb0dNQQI9bTLDw1EM","version":2}} -->
+<!-- livebook:{"offset":4090,"stamp":{"token":"XCP.4PMNH1jHJiEZ_gPOFDaoTm2SfDm9te1TU2OiCnRSojurjEHzoF7MB4JnjveRQuUUvrNyo8yxmDx4XkWK7LrnXYUTYNp03MviIqdkI1oThmK4Hvd3AEs","version":2}} -->
