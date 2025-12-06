@@ -1,0 +1,241 @@
+<!-- livebook:{"persist_outputs":true} -->
+
+# Day 6
+
+```elixir
+Mix.install([
+  {:kino_aoc,  github: "troynt/kino_aoc", branch: "main" }
+])
+```
+
+## Setup
+
+<!-- livebook:{"attrs":"eyJhc3NpZ25fdG8iOiJpbnB1dCIsImRheSI6IjYiLCJzZXNzaW9uX3NlY3JldCI6IkFPQ19TRVNTSU9OIiwieWVhciI6IjIwMjUifQ","chunks":null,"kind":"Elixir.KinoAOC.HelperCell","livebook_object":"smart_cell"} -->
+
+```elixir
+{:ok, input} = KinoAOC.download_puzzle("2025", "6", System.fetch_env!("LB_AOC_SESSION"))
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:ok,
+ "133 64  362 59 8  656 72 3657 21  3125  22 742  11   8 53  3  53 649  3 39  77 37  7 36  522 35  79 65 865 675 83 2913 652 77 7439 147 91 7   2  15 16  24 522 23 8    2 75 74 412 4    5  892   67  7 51 79 3   47  284 9  51   5 717 28  88 95  7154 4679 7   15 885 14 8135 897 998  25 24 313 6    1227 26 85 44 23 27 183 386 7    456 66 579  4 84 673 528 24 97 779  291 131 5293 2855 45 46 354  87 311 552 47 31 7836 887 19   82 616 73 4746 3843 926 983 644 9826 66 86  8  69 25 873 8242 84 91  557 11 6   2 91  7 289 69 13 1    2  4 51 183  4 78  5  1 23 6447 66 419    3 32  8 863 19 34 1593 535 22 5  35 91 95  62 15 532  7  727 23  82 1342 72 82 1291  6 4  3   261 7    46 79   4 6345 91 866 982 658 4281 52 231 4792  13 816  32 224 14 59 297 37 59 221 8825 56 1     1 7  21 9263 35 368  8 962  127 64   68 262 49  45 25    164 92 7256 44   54 17 51 5   84  12 2  87 122 62  58 3153 31   3 5766  3 317 64    7 831 871 27  55 34   1 91  55 856  7 777 73 53   579 3  722 822  3 37  2 479 817  1516 66 313 155   7 4   9676 14 73 295 18 52  21 991 612 14 72   6 58  29 393 56   77 68 465 36 38 86  7 888 458 89  7  28 9836 6143 58  39 735 8342 54   16 512 99  9234 68   435 59  8 64  5 35 29 19  74    6 71 89 1815  23 99    8 216 62    47 943   12 5   336 912 9944  3 68 215  6 25 2   122 2884 23   13 71 583 96 369 36 14  5   4    9   61 12 97  2 95  1682 524 785  2 4652 13 163 8  87 71 65 4  8      3  67 54 78 1383  53  1 6   9 62   6  4  8 665 7  18 47 67 35  6 82   1 95  2525  3 9494 9385 667 4  51  4 737 4324  775 3528 2  34 285 41  9 63 96  76 71 2  87  235 48 345   348   1  6 1587 7  8  188  251 47 336  8 58  167 3719 479 6495 15 76 1125 32  917 91 24  4 811 23   4195 234 5    2 325 92 964  67 45 9424 5743 4325 29 988 97 8  98 676 52 412    62 353 52 13  9 25  16 35 8434 912   8 22 97  7679 32 44 49 31 6711 417  8 514  79 685 8995   5  66 4   42   1  79   32 41   28 4715 3   672 7874 44 64 524 57 77 3  3747 374 3    928 8   59 9  586 98 626   8 78 82    1 72 1    4 57  943 426 85 365 648 381  7 68 11 159 97  5   31  84 13 36  26 41 678 51 244 53 491 2678 99 32   7 82 78 85 74 3644 72 31 58  58 53   5 8  936 84   6 969 473 737 2    861 34 886 172 23  7887 2515  3  2 338  7 643  4 14 735   84 57  28 8    2 598 82 5992 8     3 1139 52   35 61 388 3475 5272 838  374 68 86    2  64   2 67 4765 29 6751 42 76 87  97  8 529 21  344 5835 5    235   9 3   775 14 17 14   9 14 17   13 3883 97  5 93 5848 57 686 577 229 5368  97 2247 234 217 969 394 622 2  21   19 732 48 26  63 1   756 99 3482 866  18 42 54 1   1349 55 418 7   438 7    84 39 8415  36 232  1263 787 623 29 6   1429 83 73 439 2   696 7615 83 8   61 7592  9 4182 87 32 81 95 722 9  467 49  38 15  239  82 884   2 78 6341 84 643  66   25  72 6789  14 363 24   85 8    382 73   973 88 9627 948   8  5   4 717 565 84 44 77 32  5 4   9 23 126 3278 963 7   87 52 361 5  38 964 133 1176 832 8857 1   5   1   7 8   7 3  624 15 18 12 61 22 3  63  422 989 4795 45 728 3  9    31 12 66 339 61 35 47 981 157 55  5 939 92 4655  3 72 416 185 586 74  15 27 68  7 242 8372 54 3662   9  75 14  65  91   7 33 426 869 68 1   66 58 57  449 36 268  3 97 1  56 976 2   6674 42 574 386 816    7 33 26 9699 433 142 913 885 613  3  38 51 146 195 7    4 852 432 9793  5 4   26  569 3511  8 3    256 74 4  19 3398 47  54 2   34   62 898  175 442 939 1  21  3   9 382   3 543 2969 1  89 77   5 9899   5 75 18 2  852 569   35 252 771 274 787    4  87   58  7 45  6  1  23 841 93 843  388 2329 362 48 4973 46 33  27  287 35 92  54 5265 6  95  8   696 48 1   2 1   98 57  335 678 43  918 52   1 578  97 9758 648 13   946  23 71 9861 13 19 45 25 368 94  795 8  42 61 2  93 8   29  24 978 943  29 248   8 315 12 41 324 871 6    46 578 54 18 39 68 251  11 78   1 264 33 136 865 71   5 29 985 48\n876 329 644 35 65 37  68 8361 96  5537 121 956 746 184 67  9  45 812 21 86  22 41 21 478 552 435 52 53  66 86  88 5934 257 65 4514 336 52 1  94 147 872 32  71 26 1   75 64 13 528 45  69  529   94 55 82 92 728 71  462 48 77 535 236 77  29 64  3586 2455 37  5   58 24 1521 717 911 444 38 826 67   1521 39 21 71  8 64 876 381 98   823 74 478 26 32 594  67 5" <> ...}
+```
+
+### Disclaimer!
+
+This code is terrible. Part 2 was tricky due to spacing inconsistencies between my copy & pasted example and downloaded input. Will need to revisit when I have time to investigate. The solution should be simpler.
+
+```elixir
+ex = """
+123 328  51 64 
+ 45 64  387 23 
+  6 98  215 314
+*   +   *   +  
+"""
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+"123 328  51 64 \n 45 64  387 23 \n  6 98  215 314\n*   +   *   +  \n"
+```
+
+## Solution
+
+```elixir
+defmodule Day6 do
+  def parse(str) do
+    str
+      |> String.split("\n", trim: true)
+      |> Enum.map(&String.trim/1)
+      |> Enum.map(&String.split/1)
+      |> List.pop_at(-1)
+  end
+
+  def parse2(str) do
+    {ops, all_rows } = str
+      |> String.split("\n", trim: true)
+      |> List.pop_at(-1)
+
+
+    {{bad_op, bad_op_length}, trimmed_ops } = Regex.scan(~r/(\S)(\s+)/, ops) |> Enum.map(fn [_, op, length] ->
+      {op, String.length(length) + 1 }  
+      end) |> List.pop_at(-1)
+
+    # HACK adding 1 length to last op ... some space issues.
+    trimmed_ops = trimmed_ops ++ [{bad_op, bad_op_length + 1}]
+
+    # IO.inspect(trimmed_ops)
+    
+    better_nums = all_rows
+      |> Enum.map(fn x -> String.split(x, "") end)  
+      |> Enum.reduce([], fn nums, acc ->
+      { _, row } = Enum.reduce(trimmed_ops, {nums, [] }, fn {_, len}, {nums, final} ->
+        {taken, rest } = Enum.split(nums, len)
+        { rest, final ++ [taken]  }
+      end)
+      acc ++ [row]
+    end)
+      |> Enum.map(fn row -> Enum.map(row, &Enum.join/1) end)
+
+    { trimmed_ops |> Enum.map(&elem(&1, 0)), better_nums}
+  end
+
+  def trim(enumerable) do
+    enumerable
+      |> Enum.map(&String.trim/1)
+  end
+
+
+  def transpose(rows) do
+    rows
+    |> Enum.zip()
+    |> Enum.map(&Tuple.to_list/1)
+  end
+
+  def solve(str) do
+    {ops, nums} = parse(str)
+
+    nums |> transpose() |> Enum.zip(ops) |> Enum.reduce(0, fn {nums, op}, acc ->
+      result = case op do
+        "*" -> nums |> Enum.map(&String.to_integer/1) |> Enum.product()
+        "+" -> nums |> Enum.map(&String.to_integer/1) |> Enum.sum()
+      end
+      acc + result
+    end)
+  end
+  
+  def fix_nums(nums) do
+    max_len = nums
+      |> Enum.max_by(&String.length/1)
+      |> String.length()
+
+    result = (max_len - 1)..0 |> Enum.map(fn place ->
+      Enum.reduce(nums, "", fn n, acc ->
+        next = extract_digit(n, place)
+        acc <> next
+        end)
+      end) |> trim() |> Enum.reject(fn x -> String.length(x) == 0 end)
+    
+    result |> Enum.map(&String.to_integer/1)
+  end
+
+  def extract_digit(val, position) do
+    String.at(val, position) || ""
+  end
+
+  def solve2(str) do
+    {ops, nums} = parse2(str)
+
+    nums |> transpose() |> Enum.zip(ops) |> Enum.reduce(0, fn {nums, op}, acc ->
+      result = case op do
+        "*" -> nums |> fix_nums() |> Enum.product()
+        "+" -> nums |> fix_nums() |> Enum.sum()
+      end
+      acc + result
+    end)
+  end
+end
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day6, <<70, 79, 82, 49, 0, 0, 37, ...>>, ...}
+```
+
+<!-- livebook:{"branch_parent_index":1} -->
+
+## Part 1
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day6.parse(ex)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{["*", "+", "*", "+"],
+ [["123", "328", "51", "64"], ["45", "64", "387", "23"], ["6", "98", "215", "314"]]}
+```
+
+```elixir
+Day6.solve(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+6378679666679
+```
+
+<!-- livebook:{"branch_parent_index":1} -->
+
+## Part 2
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+Day6.parse2(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+{["*", "+", "*", "*", "*", "+", "*", "+", "*", "+", "+", "*", "+", "+", "+", "*", "*", "*", "+",
+  "*", "*", "*", "*", "+", "*", "+", "*", "*", "+", "+", "*", "+", "*", "+", "+", "*", "*", "*",
+  "*", "*", "*", "+", "*", "*", "*", "+", "*", "*", "*", "*", "+", "+", "+", "*", "*", "+", "*",
+  "+", "+", "+", "+", "*", "*", "+", "*", "*", "+", "+", "+", "*", "*", "*", "+", "*", "*", "+",
+  "*", "*", "+", "+", "*", "+", "+", "*", "*", "+", "*", "+", "*", "+", "*", "*", "+", "*", "+",
+  "*", "+", "+", "+", ...], ...}
+```
+
+```elixir
+Day6.solve2(ex)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+3263827
+```
+
+```elixir
+# 356 * 24 * 1 = 8544
+Day6.fix_nums(["123", " 45", "  6"])
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[356, 24, 1]
+```
+
+<!-- livebook:{"reevaluate_automatically":true} -->
+
+```elixir
+#  8 + 248 + 369 = 625
+Day6.fix_nums(["328", "64 ", "98 "])
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+[8, 248, 369]
+```
+
+```elixir
+Day6.solve2(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+11494432585168
+```
+
+<!-- livebook:{"offset":9188,"stamp":{"token":"XCP.lTbtkctmEsi2eHYIkqNK2Y-gA7D_YFo3Tfer64UZHZJvQAwb8GIQOkc80AAO8OBOqEfp_KIuoDjONzwAMYlNqctrqLpYokh1G_uYGyvRnfDw4Q4KUtM","version":2}} -->
