@@ -4,7 +4,7 @@
 
 ```elixir
 Mix.install([
-  {:kino_aoc, "~> 0.1"}
+  {:kino_aoc,  github: "troynt/kino_aoc", branch: "main" }
 ])
 ```
 
@@ -96,7 +96,7 @@ defmodule Day1 do
     { _, click_count } = Enum.reduce(instructions, {50, 0}, fn ({dir, amt}, {pos, click_count }) ->
       {pos, clicks} = turn(pos, {dir, amt})
 
-      IO.puts(dir <> to_string(amt) <> " pos " <> to_string(pos) <> " clicks " <> to_string(clicks))
+      # IO.puts(dir <> to_string(amt) <> " pos " <> to_string(pos) <> " clicks " <> to_string(clicks))
 
       { pos, clicks + click_count }
 
@@ -107,14 +107,32 @@ defmodule Day1 do
 end
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+{:module, Day1, <<70, 79, 82, 49, 0, 0, 28, ...>>, ...}
+```
+
 <!-- livebook:{"reevaluate_automatically":true} -->
 
 ```elixir
 Day1.solve(ex)
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+3
+```
+
 ```elixir
 Day1.solve(input)
+```
+
+<!-- livebook:{"output":true} -->
+
+```
+1195
 ```
 
 <!-- livebook:{"branch_parent_index":0} -->
@@ -125,8 +143,20 @@ Day1.solve(input)
 Day1.solve2(ex)
 ```
 
+<!-- livebook:{"output":true} -->
+
+```
+6
+```
+
 ```elixir
 Day1.solve2(input)
 ```
 
-<!-- livebook:{"offset":7741,"stamp":{"token":"XCP.8MfboQ4Z6HP5NpTVrfgSIXxwMSVSHLPk-sZEVDB-rzE1jLv-bOsGJYmjEH75zstHST6J4gasjohgODLpO7rSPuNHWHPJeB5IfjMvWuG2Mm-u079KNgA","version":2}} -->
+<!-- livebook:{"output":true} -->
+
+```
+6770
+```
+
+<!-- livebook:{"offset":8068,"stamp":{"token":"XCP.lRLAv_Jt2wNSb8M7Tm2C521fjgO3eHppN4VDPZhDdo5WZCMHtXF4hQ8B1mpkwGJwdA5FAiv8eLvGe0iasY8EGWRbQVidguGGfyP2TM66mh4B7xk5Pw0","version":2}} -->
