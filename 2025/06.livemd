@@ -106,7 +106,14 @@ defmodule Day6 do
       acc + result
     end)
   end
-  
+
+  @moduledoc """
+      iex> Day6.fix_nums(["123", " 45", "  6"])
+      [356, 24, 1]
+
+      iex> Day6.fix_nums(["328", "64 ", "98 "])
+      [8, 248, 369]
+  """
   def fix_nums(nums) do
     max_len = nums
       |> Enum.max_by(&String.length/1)
@@ -205,30 +212,6 @@ Day6.solve2(ex)
 ```
 
 ```elixir
-# 356 * 24 * 1 = 8544
-Day6.fix_nums(["123", " 45", "  6"])
-```
-
-<!-- livebook:{"output":true} -->
-
-```
-[356, 24, 1]
-```
-
-<!-- livebook:{"reevaluate_automatically":true} -->
-
-```elixir
-#  8 + 248 + 369 = 625
-Day6.fix_nums(["328", "64 ", "98 "])
-```
-
-<!-- livebook:{"output":true} -->
-
-```
-[8, 248, 369]
-```
-
-```elixir
 Day6.solve2(input)
 ```
 
@@ -238,4 +221,4 @@ Day6.solve2(input)
 11494432585168
 ```
 
-<!-- livebook:{"offset":9188,"stamp":{"token":"XCP.lTbtkctmEsi2eHYIkqNK2Y-gA7D_YFo3Tfer64UZHZJvQAwb8GIQOkc80AAO8OBOqEfp_KIuoDjONzwAMYlNqctrqLpYokh1G_uYGyvRnfDw4Q4KUtM","version":2}} -->
+<!-- livebook:{"offset":9028,"stamp":{"token":"XCP.Gvdh3cMRZgGtZD87N6akc4f6fw9czm6hpiWxMMqq48oEUlVI1U6jpklHEyMnSdZGXJJVJEcE9a56ADVjfNYdbJaPAWNvNrbV3DEiW-uKOrCgmRjpCfg","version":2}} -->
