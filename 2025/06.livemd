@@ -107,7 +107,7 @@ defmodule Day6 do
     end)
   end
 
-  @moduledoc """
+  @doc """
       iex> Day6.fix_nums(["123", " 45", "  6"])
       [356, 24, 1]
 
@@ -221,4 +221,4 @@ Day6.solve2(input)
 11494432585168
 ```
 
-<!-- livebook:{"offset":9028,"stamp":{"token":"XCP.Gvdh3cMRZgGtZD87N6akc4f6fw9czm6hpiWxMMqq48oEUlVI1U6jpklHEyMnSdZGXJJVJEcE9a56ADVjfNYdbJaPAWNvNrbV3DEiW-uKOrCgmRjpCfg","version":2}} -->
+<!-- livebook:{"offset":9022,"stamp":{"token":"XCP.Cq2Ik7wEyjcyEOgnSSJAddNfd4idMRFOIRucPqBNXJcAgSGvBWAlKkA6N5s8D97a5w9f-5h8gSlCiZdHJNqvE5b8FT47n1kDKYthVmayPBiV126Ttjw","version":2}} -->
