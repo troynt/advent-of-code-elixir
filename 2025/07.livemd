@@ -170,9 +170,9 @@ defmodule Day7 do
   def solve(str) do
     {grid, start_pos} = parse(str)
 
-    { grid, split_count } = handle_beams(grid, [start_pos])
+    { _, split_count } = handle_beams(grid, [start_pos])
 
-    { grid, split_count }
+    split_count
   end
 end
 ```
@@ -188,7 +188,13 @@ end
 <!-- livebook:{"reevaluate_automatically":true} -->
 
 ```elixir
-Day7.solve(input) |> elem(1)
+Day7.solve(input)
 ```
 
-<!-- livebook:{"offset":8687,"stamp":{"token":"XCP.hASUE5VAr94Y-Gk5hyPZTRsrCzWMcQKb6Fdh_KYCQOspkNXOxU9qXD2kLSv97kfmJaI2YFrQHZ71oru2I2XnwIM4ARva2focyM1L5-ItELXoLaVQLpI","version":2}} -->
+<!-- livebook:{"output":true} -->
+
+```
+1573
+```
+
+<!-- livebook:{"offset":8712,"stamp":{"token":"XCP.AG4sND1HalNpVzGb0uYRUSfrnxz7DPAI0cVDGKXYuFBsfwnR2qlkMOS2_IdfGKNtZVjS-xcNnlWgzeRFOpaMki7LyEzdN3AEMe7WHemeYtk4KWPLv6s","version":2}} -->
